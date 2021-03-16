@@ -30,4 +30,10 @@ jobs:
     - run: npm test
     - name: Frontend Tests
       working-directory: ./frontend
+      run: npm run build --if-present
       run: npm test
+    - name: Backend Tests
+      working-directory: ./services/roomService
+      run: npm run build --if-present
+      run: npm test
+      

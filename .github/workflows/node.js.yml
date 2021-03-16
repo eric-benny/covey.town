@@ -36,4 +36,3 @@ jobs:
       working-directory: ./services/roomService
       run: npm run build --if-present
       run: npm test
-      

@@ -6,7 +6,7 @@ export default class Player {
   private readonly _userName: string;
 
   // mapID field added by MD, modified to public by EB
-  public mapID?: string;
+  public mapID: string;
 
   public sprite?: Phaser.GameObjects.Sprite;
 
@@ -28,7 +28,7 @@ export default class Player {
     return this._id;
   }
 
-  // updated to include new mapID parameter by MD  
+  // updated to include new mapID parameter by MD
   static fromServerPlayer(playerFromServer: ServerPlayer): Player {
     return new Player(playerFromServer._id, playerFromServer._userName, playerFromServer.location, playerFromServer._mapID);
   }

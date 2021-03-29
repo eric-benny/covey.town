@@ -4,6 +4,9 @@ import Video from '../../classes/Video/Video';
 // import useCoveyAppState from '../../hooks/useCoveyAppState';
 
 export default class CoveySuperMapScene extends Phaser.Scene {
+  // added field here, so subMap can initialize this property to the tile map specific to the subMap
+  protected tilemap: string;
+
   // added to use for filtering of other players by map
   private playerID: string;
 
@@ -42,6 +45,8 @@ export default class CoveySuperMapScene extends Phaser.Scene {
       this.video = video;
       this.emitMovement = emitMovement;
       this.playerID = playerID;
+      this.tilemap = 'tuxmon-sample-32px-extruded'
+
     }
 
     preload() {
@@ -58,53 +63,55 @@ export default class CoveySuperMapScene extends Phaser.Scene {
     }
 
 
-    updatePlayersLocations(players: Player[]) {
-      if (!this.ready) {
-        this.players = players;
-        return;
+  updatePlayersLocations(players: Player[]) {
+    if (!this.ready) {
+      this.players = players;
+      return;
+    }
+    players.forEach((p) => {
+      this.updatePlayerLocation(p);
+    });
+    // Remove disconnected players from board
+    const disconnectedPlayers = this.players.filter(
+      (player) => !players.find((p) => p.id === player.id),
+    );
+    disconnectedPlayers.forEach((disconnectedPlayer) => {
+      if (disconnectedPlayer.sprite) {
+        disconnectedPlayer.sprite.destroy();
+        disconnectedPlayer.label?.destroy();
       }
-      players.forEach((p) => {
-        this.updatePlayerLocation(p);
-      });
-      // Remove disconnected players from board
-      const disconnectedPlayers = this.players.filter(
-        (player) => !players.find((p) => p.id === player.id),
+    });
+    // Remove disconnected players from list
+    if (disconnectedPlayers.length) {
+      this.players = this.players.filter(
+        (player) => !disconnectedPlayers.find(
+          (p) => p.id === player.id,
+        ),
       );
-      disconnectedPlayers.forEach((disconnectedPlayer) => {
-        if (disconnectedPlayer.sprite) {
-          disconnectedPlayer.sprite.destroy();
-          disconnectedPlayer.label?.destroy();
-        }
-      });
-      // Remove disconnected players from list
-      if (disconnectedPlayers.length) {
-        this.players = this.players.filter(
-          (player) => !disconnectedPlayers.find(
-            (p) => p.id === player.id,
-          ),
-        );
-      }
-      // add filter step here for players not in current map
-      const currentMap = this.getCurrentMapID();
-      const playersToRemove = this.players.filter(
-        (player) => player.mapID !== currentMap
-      );
-      playersToRemove.forEach((playerToRemove) => {
-        if (playerToRemove.sprite) {
-          playerToRemove.sprite.destroy();
-          playerToRemove.label?.destroy();
-        }
-      });
-      if (playersToRemove.length) {
-        this.players = this.players.filter(
-          (player) => !playersToRemove.find(
-            (p) => p.id === player.id,
-          ),
-        );
-      }
     }
 
-    updatePlayerLocation(player: Player) {
+    // add filter step here for players not in current map
+    const currentMap = this.getCurrentMapID();
+    const playersToRemove = this.players.filter(
+      (player) => player.mapID !== currentMap
+    );
+
+    playersToRemove.forEach((playerToRemove) => {
+      if (playerToRemove.sprite) {
+        playerToRemove.sprite.destroy();
+        playerToRemove.label?.destroy();
+      }
+    });
+    if (playersToRemove.length) {
+      this.players = this.players.filter(
+        (player) => !playersToRemove.find(
+          (p) => p.id === player.id,
+        ),
+      );
+    }
+  }
+
+  updatePlayerLocation(player: Player) {
       let myPlayer = this.players.find((p) => p.id === player.id);
       if (!myPlayer) {
         let { location } = player;
@@ -266,7 +273,7 @@ export default class CoveySuperMapScene extends Phaser.Scene {
       /* Parameters are the name you gave the tileset in Tiled and then the key of the
        tileset image in Phaser's cache (i.e. the name you used in preload)
        */
-      const tileset = map.addTilesetImage('tuxmon-sample-32px-extruded', 'tiles');
+      const tileset = map.addTilesetImage(this.tilemap, 'tiles');
 
       // Parameters: layer name (or index) from Tiled, tileset, x, y
       // eslint-disable-next-line @typescript-eslint/no-unused-vars

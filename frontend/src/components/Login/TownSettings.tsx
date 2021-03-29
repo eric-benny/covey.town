@@ -39,8 +39,9 @@ const TownSettings: React.FunctionComponent = () => {
     video?.unPauseGame();
   }, [onClose, video]);
 
-  const [friendlyName, setFriendlyName] = useState(currentTownFriendlyName);
-  const [isPublic, setIsPublic] = useState(currentTownIsPubliclyListed);
+  // TODO: check if this code is from HW4
+  // const [friendlyName, setFriendlyName] = useState(currentTownFriendlyName);
+  // const [isPublic, setIsPublic] = useState(currentTownIsPubliclyListed);
   const [password, setPassword] = useState('');
 
   const toast = useToast()

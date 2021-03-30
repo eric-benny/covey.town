@@ -81,7 +81,7 @@ describe('CoveyTownController', () => {
       const newController = createTownAddListeners([mockListeners[0]]);
       const playerToMigrate = new Player('Player1');
       await newController.addPlayer(playerToMigrate);
-      expect(playerToMigrate.mapId).toEqual('0');
+      expect(playerToMigrate.mapID).toEqual('0');
 
       newController.updatePlayerMap(playerToMigrate, '1');
       newController.addTownListener(mockListeners[2]);

@@ -1,47 +1,36 @@
-// import Phaser from "phaser";
-import CoveySuperMapScene from "./CoveySuperMapScene";
-// import Player, {UserLocation} from "../../classes/Player";
-// import Video from "../../classes/Video/Video";
 
-// TODO : Stub-out CoveySubMapScene
-// TODO: Add trigger-tile event handling to CoveySubMapScene
+import CoveySuperMapScene from "./CoveySuperMapScene";
+import {CoveyTownMapID, UserLocation} from "../../classes/Player";
+import Video from "../../classes/Video/Video";
+
 export default class CoveySubMapScene extends CoveySuperMapScene {
   // class types are inferred from their assignments in the constructor
 
   // constructor takes values from CoveySuperMapScene can include additional properties above
   // and parameters if needed.
-  // constructor(video: Video, emitMovement: (loc:UserLocation) => void) {
-  //   super(video, emitMovement);
-  // }
+  constructor(video: Video, emitMovement: (loc:UserLocation) => void, emitMapChange: (map: CoveyTownMapID) => void, playerID: string) {
+    super(video, emitMovement, emitMapChange, playerID);
+    this.tilemap = 'pokemon_big'
+  }
 
   // updated preload with tilemaps specific to subMap tilesets
   preload() {
     this.load.image('tiles', '/assets/tilesets/pokemon_big.png');
-    this.load.tilemapTiledJSON('map', '/assets/tilemaps/submap.json');
+    this.load.tilemapTiledJSON('map', '/assets/tilemaps/indoors.json');
     this.load.atlas('atlas', '/assets/atlas/atlas.png', '/assets/atlas/atlas.json');
   }
 
-  /* hard-coding this to filter the players out to just include subMap players
-  this can be refactored later once it is working. */
-  // updatePlayersLocations(players: Player[]) {
-  // }
+  // MD added transfer player function to handle trigger tile event
+  transferPlayer() {
+    console.log("emitting map change to 0!")
+    this.emitMapChange("0")
+    const updatedMap = this.getCurrentMapID()
+    console.log("current map: ", updatedMap)
+    // emit movement to new map spawn point
+    // emit 
+  }
 
- /* note to check: inside the updatePlayersLocations function, it makes a call to
-  * updatePlayerLocation function.  So I pasted it here and we can decide later
-  * if we need keep it, copy the whole thing over, or tweak it
-  */
-  // updatePlayerLocation(player: Player) {
-
-
-  /* may need the update() function which checks the trigger points of the doorway on a subMap.
-  * Within this function from the superMap, it has a lot of things we may not need to copy over.
-  * One thing we may need is the code towards the end of that function, where JP wrote
-  * some validation checks to check if the player is in the door way. We may want
-  * to do this for a subMap doorway, but need to figure out how much to copy over.
-  */
-  // update() {
 }
-
 
   /*
   Scenario: SuperMap player steps on to tile trigger player is now in subMap

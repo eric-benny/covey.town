@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import Player, { UserLocation } from '../../classes/Player';
+import Player, { CoveyTownMapID, UserLocation } from '../../classes/Player';
 import Video from '../../classes/Video/Video';
 // import useCoveyAppState from '../../hooks/useCoveyAppState';
 
@@ -37,13 +37,16 @@ export default class CoveySuperMapScene extends Phaser.Scene {
 
   private emitMovement: (loc: UserLocation) => void;
 
+  protected emitMapChange: (map: CoveyTownMapID) => void; // MD set to protected
+
   // JP: Moved map to a field to allow map's properties to be referenced from update()
   private map?: Phaser.Tilemaps.Tilemap;
 
-    constructor(video: Video, emitMovement: (loc: UserLocation) => void, playerID: string) {
+    constructor(video: Video, emitMovement: (loc: UserLocation) => void, emitMapChange: (map: CoveyTownMapID) => void, playerID: string) {
       super('PlayGame');
       this.video = video;
       this.emitMovement = emitMovement;
+      this.emitMapChange = emitMapChange;
       this.playerID = playerID;
       this.tilemap = 'tuxmon-sample-32px-extruded'
 
@@ -60,6 +63,16 @@ export default class CoveySuperMapScene extends Phaser.Scene {
     getCurrentMapID() {
       const myPlayer = this.players.find((player) => player.id === this.playerID)
       return myPlayer?.mapID
+    }
+
+    // MD added transfer player function to handle trigger tile event
+    transferPlayer() {
+      console.log("emitting map change to 1!")
+      this.emitMapChange("1")
+      const updatedMap = this.getCurrentMapID()
+      console.log("current map: ", updatedMap)
+      // emit movement to new map spawn point
+      // emit 
     }
 
 
@@ -260,9 +273,7 @@ export default class CoveySuperMapScene extends Phaser.Scene {
           && body.y > tl.y
           && body.y < br.y) {
             // TODO Change
-            // destroy player sprite
-            // emit movement to new map spawn point
-            // emit 
+            this.transferPlayer() // MD added function call to handle trigger tile event
             console.log("Change me!");
           }
       }

@@ -126,7 +126,7 @@ export default class CoveySuperMapScene extends Phaser.Scene {
   updatePlayerLocation(player: Player) {
       let myPlayer = this.players.find((p) => p.id === player.id);
       if (!myPlayer) {
-        let { location } = player;
+        let { location, mapID } = player;
         if (!location) {
           location = {
             rotation: 'back',
@@ -135,8 +135,11 @@ export default class CoveySuperMapScene extends Phaser.Scene {
             y: 0,
           };
         }
+        if (!mapID) {
+          mapID = '0';
+        }
         // MD added mapID to Player call
-        myPlayer = new Player(player.id, player.userName, location, player.mapID);
+        myPlayer = new Player(player.id, player.userName, location, mapID);
         this.players.push(myPlayer);
       }
       if (this.id !== myPlayer.id && this.physics && player.location) {

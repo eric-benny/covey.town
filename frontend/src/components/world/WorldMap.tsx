@@ -58,7 +58,7 @@ const myPlayer = players.find((player) => player.id === myPlayerID)
     return () => {
       game.destroy(true);
     };
-  }, [video, emitMovement, myPlayer]); // myPlayer dependency added by MD
+  }, [video, emitMovement, myPlayer, myPlayerID]); // myPlayer and myPlayerID dependencies added by MD
 
   const deepPlayers = JSON.stringify(players);
   useEffect(() => {

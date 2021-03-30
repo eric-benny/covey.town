@@ -95,7 +95,6 @@ export default class CoveySuperMapScene extends Phaser.Scene {
     const playersToRemove = this.players.filter(
       (player) => player.mapID !== currentMap
     );
-
     playersToRemove.forEach((playerToRemove) => {
       if (playerToRemove.sprite) {
         playerToRemove.sprite.destroy();
@@ -261,6 +260,9 @@ export default class CoveySuperMapScene extends Phaser.Scene {
           && body.y > tl.y
           && body.y < br.y) {
             // TODO Change
+            // destroy player sprite
+            // emit movement to new map spawn point
+            // emit 
             console.log("Change me!");
           }
       }

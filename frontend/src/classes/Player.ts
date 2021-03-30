@@ -6,13 +6,13 @@ export default class Player {
   private readonly _userName: string;
 
   // mapID field added by MD, modified to public by EB
-  public mapID: string;
+  public mapID: CoveyTownMapID;
 
   public sprite?: Phaser.GameObjects.Sprite;
 
   public label?: Phaser.GameObjects.Text;
 
-  constructor(id: string, userName: string, location: UserLocation, mapID: string) {
+  constructor(id: string, userName: string, location: UserLocation, mapID: CoveyTownMapID) {
     this._id = id;
     this._userName = userName;
     this.location = location;
@@ -34,7 +34,7 @@ export default class Player {
   }
 }
 // server player updated to include mapID by MD
-export type ServerPlayer = { _id: string, _userName: string, location: UserLocation, _mapID: string };
+export type ServerPlayer = { _id: string, _userName: string, location: UserLocation, _mapID: CoveyTownMapID };
 
 export type Direction = 'front'|'back'|'left'|'right';
 

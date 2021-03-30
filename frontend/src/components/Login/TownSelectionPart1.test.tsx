@@ -85,6 +85,7 @@ function wrappedTownSelection() {
     players: [],
     myPlayerID: '',
     currentTownID: '',
+    currentMapID: '0',
     currentTownIsPubliclyListed: false,
     currentTownFriendlyName: '',
     sessionToken: '',
@@ -97,6 +98,8 @@ function wrappedTownSelection() {
       moving: false,
     },
     emitMovement: () => {
+    },
+    emitMapChange: () => {
     },
     apiClient: new TownsServiceClient(),
   }}>
@@ -284,4 +287,3 @@ describe('Part 1 - Public room listing', () => {
     })
   });
 });
-

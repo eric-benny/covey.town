@@ -39,8 +39,9 @@ function wrappedTownSettings() {
     players: [],
     myPlayerID: '',
     currentTownID: '',
-    currentTownFriendlyName: '',
+    currentMapID: '0',
     currentTownIsPubliclyListed: false,
+    currentTownFriendlyName: '',
     sessionToken: '',
     userName: '',
     socket: null,
@@ -51,6 +52,8 @@ function wrappedTownSettings() {
       moving: false,
     },
     emitMovement: () => {
+    },
+    emitMapChange: () => {
     },
     apiClient: new TownsServiceClient(),
   }}>
@@ -88,6 +91,7 @@ describe('Part 4 - Town Settings', () => {
     mockUseDisclosure.onClose.mockReset();
   });
   it("Loads the default form values from the current app state", async () => {
+    jest.setTimeout(10000);
     let params = {
       friendlyName: nanoid(),
       isPubliclyListed: true,

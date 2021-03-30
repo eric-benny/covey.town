@@ -238,7 +238,7 @@ export function townSubscriptionHandler(socket: Socket): void {
 
   // Register an event listener for the client socket: if the client updates their
   // map, inform the CoveyTownController
-  socket.on('playerMapChange', (mapId: CoveyTownMapID) => {
-    townController.updatePlayerMap(s.player, mapId);
+  socket.on('playerMapChange', (mapID: CoveyTownMapID) => {
+    townController.updatePlayerMap(s.player, mapID);
   });
 }

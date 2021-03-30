@@ -137,51 +137,6 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
     }
   };
 
-  const createTown = async () => {
-    try {
-      if (!userName || userName.length === 0) {
-        toast({
-          title: 'Unable to create town',
-          description: 'Please select a username before creating a town',
-          status: 'error',
-        });
-        return;
-      }
-      if (!newTownName || newTownName.length === 0) {
-        toast({
-          title: 'Unable to create town',
-          description: 'Please enter a town name',
-          status: 'error',
-        });
-        return;
-      }
-
-      const town = await apiClient.createTown({
-        friendlyName: newTownName,
-        // TODO: check if this code is from HW4
-        // AC: changed isPubliclyListed to true, so that this can compile
-        // isPubliclyListed: isPublic,
-        isPubliclyListed: true,
-      })
-
-      toast({
-        title: `Town ${newTownName} is ready to go!`,
-          description: 'Created town',
-          status: 'success',
-          isClosable: true,
-          duration: null
-      })
-
-      handleJoin(town.coveyTownID);
-    } catch (err) {
-      toast({
-        title: 'Unable to connect to Towns Service',
-        description: err.toString(),
-        status: 'error'
-      })
-    }
-  };
-
   return (
     <>
       <form>
@@ -197,8 +152,6 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
               />
             </FormControl>
           </Box>
-
-          {/* Part 3 starts 3 */}
           <Box borderWidth="1px" borderRadius="lg">
             <Heading p="4" as="h2" size="lg">Create a New Town</Heading>
             <Flex p="4">
@@ -242,7 +195,7 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
             </Box>
 
             <Heading p="4" as="h4" size="md">Select a public town to join</Heading>
-            <Box maxH="500px" overflowY="scroll">{/* This is where Part 1 begins */}
+            <Box maxH="500px" overflowY="scroll">
               <Table>
                 <TableCaption placement="bottom">Publicly Listed Towns</TableCaption>
                 <Thead><Tr><Th>Room Name</Th><Th>Room ID</Th><Th>Activity</Th></Tr></Thead>

@@ -65,6 +65,7 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
         });
         return;
       }
+
       if (!coveyRoomID || coveyRoomID.length === 0) {
         toast({
           title: 'Unable to join town',

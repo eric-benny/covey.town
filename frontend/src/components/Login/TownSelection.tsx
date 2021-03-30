@@ -65,7 +65,7 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
         });
         return;
       }
-      
+
       if (!coveyRoomID || coveyRoomID.length === 0) {
         toast({
           title: 'Unable to join town',
@@ -158,7 +158,10 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
 
       const town = await apiClient.createTown({
         friendlyName: newTownName,
-        isPubliclyListed: isPublic,
+        // TODO: check if this code is from HW4
+        // AC: changed isPubliclyListed to true, so that this can compile
+        // isPubliclyListed: isPublic,
+        isPubliclyListed: true,
       })
 
       toast({

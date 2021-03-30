@@ -86,6 +86,7 @@ function wrappedTownSelection() {
     players: [],
     myPlayerID: '',
     currentTownID: '',
+    currentMapID: '0',
     currentTownIsPubliclyListed: false,
     currentTownFriendlyName: '',
     sessionToken: '',
@@ -98,6 +99,8 @@ function wrappedTownSelection() {
       moving: false,
     },
     emitMovement: () => {
+    },
+    emitMapChange: () => {
     },
     apiClient: new TownsServiceClient(),
   }}>

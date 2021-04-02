@@ -77,6 +77,8 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
     apiClient: state.apiClient,
   };
 
+  // Function which calculates nearby players
+  // Updated to account for sub maps
   function calculateNearbyPlayers(players: Player[], currentLocation: UserLocation, currentMapID: CoveyTownMapID) {
     const isWithinCallRadius = (p: Player, location: UserLocation) => {
       if (p.location && location) {
@@ -88,9 +90,9 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
       return false;
     };
 
-    // If player is in the super map, calculate nearby players by radius
+    // If player is in the super map, calculate nearby players by radius for players also on the super map
     if (currentMapID === '0') {
-      return { nearbyPlayers: players.filter((p) => isWithinCallRadius(p, currentLocation)) };
+      return { nearbyPlayers: players.filter((p) => isWithinCallRadius(p, currentLocation) && p.mapID === '0')};
     } 
     // If the player is in a sub map, all players in the same sub map are considered nearby
     return { nearbyPlayers: players.filter((p) => p.mapID === currentMapID) };
@@ -145,28 +147,28 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
     // Actions which handle when a player changed between super and sub maps
     // Update the map id of the player that changed maps, recalculate nearby players
     case 'playerMapChanged':
-        updatePlayer = nextState.players.find((p) => p.id === update.player.id);
-        if (updatePlayer) {
-          updatePlayer.mapID = update.player.mapID;
-        } else {
-          nextState.players = nextState.players.concat([update.player]);
-        }
-        nextState.nearbyPlayers = calculateNearbyPlayers(nextState.players,
-          nextState.currentLocation, nextState.currentMapID);
-        if (samePlayers(nextState.nearbyPlayers, state.nearbyPlayers)) {
-          nextState.nearbyPlayers = state.nearbyPlayers;
-        }
-        break;
-      // Update our map id when we change maps, recalculate nearby players
-      case 'weMapChanged':
-          nextState.currentMapID = update.mapID;
-          nextState.nearbyPlayers = calculateNearbyPlayers(nextState.players,
-            nextState.currentLocation, nextState.currentMapID);
-          if (samePlayers(nextState.nearbyPlayers, state.nearbyPlayers)) {
-            nextState.nearbyPlayers = state.nearbyPlayers;
-          }
-    
-          break;
+      updatePlayer = nextState.players.find((p) => p.id === update.player.id);
+      if (updatePlayer) {
+        updatePlayer.mapID = update.player.mapID;
+      } else {
+        nextState.players = nextState.players.concat([update.player]);
+      }
+      nextState.nearbyPlayers = calculateNearbyPlayers(nextState.players,
+        nextState.currentLocation, nextState.currentMapID);
+      if (samePlayers(nextState.nearbyPlayers, state.nearbyPlayers)) {
+        nextState.nearbyPlayers = state.nearbyPlayers;
+      }
+      break;
+    // Update our map id when we change maps, recalculate nearby players
+    case 'weMapChanged':
+      nextState.currentMapID = update.mapID;
+      nextState.nearbyPlayers = calculateNearbyPlayers(nextState.players,
+        nextState.currentLocation, nextState.currentMapID);
+      if (samePlayers(nextState.nearbyPlayers, state.nearbyPlayers)) {
+        nextState.nearbyPlayers = state.nearbyPlayers;
+      }
+
+      break;
     case 'playerDisconnect':
       nextState.players = nextState.players.filter((player) => player.id !== update.player.id);
 
@@ -226,11 +228,11 @@ async function GameController(initData: TownJoinResponse,
     socket.emit('playerMovement', location);
     dispatchAppUpdate({ action: 'weMoved', location });
   };
-  // When our player changes maps, emit and event to be consumed and handled by server socket
+  // When our player changes maps, emit an event to be consumed and handled by server socket
   // Server socket will emit the event to other players who are listening
-  // Dispatch action which updates our state
+  // Dispatch action which updates our map id in the state
   const emitMapChange = (mapID: CoveyTownMapID) => {
-    socket.emit('playerMapChange', mapID);
+    socket.emit('playerMigration', mapID);
     dispatchAppUpdate({ action: 'weMapChanged', mapID });
   };
 

@@ -517,7 +517,11 @@ export default class CoveySuperMapScene extends Phaser.Scene {
 
     resume() {
       this.paused = false;
-      this.input.keyboard.addCapture(this.previouslyCapturedKeys);
+      // this.input.keyboard.addCapture(this.previouslyCapturedKeys);
+      if(Video.instance()){
+        // If the game is also in process of being torn down, the keyboard could be undefined
+        this.input.keyboard.addCapture(this.previouslyCapturedKeys);
+      }
       this.previouslyCapturedKeys = [];
     }
   }

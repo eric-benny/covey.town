@@ -1,31 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import Phaser from 'phaser';
-import Player, { CoveyTownMapID, UserLocation } from '../../classes/Player';
+import { CoveyTownMapID, UserLocation } from '../../classes/Player';
 import Video from '../../classes/Video/Video';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
 import CoveySuperMapScene from './CoveySuperMapScene';
 import CoveySubMapScene from './CoveySubMapScene';
 
 // MD added emitMapChange parameter to pass to scene constructor
-function createMapScene(myPlayer: Player | undefined, video: Video, emitMovement: (location: UserLocation) => void, 
-                        emitMapChange: (map: CoveyTownMapID) => void, playerID: string, currentMapID: CoveyTownMapID) {
+function createMapScene(video: Video, emitMovement: (location: UserLocation) => void, 
+                        emitMapChange: (map: CoveyTownMapID) => void, currentMapID: CoveyTownMapID) {
 
   // MD updated map call logic
   if (currentMapID === '1') {
-    return new CoveySubMapScene(video, emitMovement, emitMapChange, playerID)
+    return new CoveySubMapScene(video, emitMovement, emitMapChange, currentMapID)
   }
-  return new CoveySuperMapScene(video, emitMovement, emitMapChange, playerID)
+  return new CoveySuperMapScene(video, emitMovement, emitMapChange, currentMapID)
 }
 
 // MD extracted emitMapChange, mapID from state
 export default function WorldMap(): JSX.Element {
   const video = Video.instance();
   const {
-    emitMovement, players, myPlayerID, emitMapChange, currentMapID
+    emitMovement, players, emitMapChange, currentMapID
   } = useCoveyAppState();
 
 // get my player from player array
-const myPlayer = players.find((player) => player.id === myPlayerID)
+// const myPlayer = players.find((player) => player.id === myPlayerID)
 
   const [gameScene, setGameScene] = useState<CoveySuperMapScene>();
   useEffect(() => {
@@ -44,8 +44,7 @@ const myPlayer = players.find((player) => player.id === myPlayerID)
 
     const game = new Phaser.Game(config);
     if (video) {
-      const newGameScene = createMapScene(myPlayer, video, emitMovement, emitMapChange, myPlayerID, currentMapID);
-      // const newGameScene = new CoveySuperMapScene(video, emitMovement);
+      const newGameScene = createMapScene(video, emitMovement, emitMapChange, currentMapID);
       setGameScene(newGameScene);
       game.scene.add('coveyBoard', newGameScene, true);
       video.pauseGame = () => {
@@ -58,7 +57,7 @@ const myPlayer = players.find((player) => player.id === myPlayerID)
     return () => {
       game.destroy(true);
     };
-  }, [video, emitMovement, myPlayer, myPlayerID, emitMapChange, currentMapID]); // myPlayer, myPlayerID, emitMapChange dependencies added by MD
+  }, [video, emitMovement, emitMapChange, currentMapID]); // emitMapChange dependency added by MD
 
   const deepPlayers = JSON.stringify(players);
   useEffect(() => {

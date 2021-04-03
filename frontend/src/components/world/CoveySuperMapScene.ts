@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import Player, { CoveyTownMapID, UserLocation } from '../../classes/Player';
+import Player, { CoveyTownMapID, Direction, UserLocation } from '../../classes/Player';
 import Video from '../../classes/Video/Video';
 // import useCoveyAppState from '../../hooks/useCoveyAppState';
 
@@ -51,7 +51,7 @@ export default class CoveySuperMapScene extends Phaser.Scene {
       this.tilemap = 'tuxmon-sample-32px-extruded'
     }
 
-    preload() {
+    preload(): void {
       // this.load.image("logo", logoImg);
       this.load.image('tiles', '/assets/tilesets/tuxmon-sample-32px-extruded.png');
       this.load.tilemapTiledJSON('map', '/assets/tilemaps/tuxemon-town.json');
@@ -65,17 +65,64 @@ export default class CoveySuperMapScene extends Phaser.Scene {
     // }
 
     // MD added transfer player function to handle trigger tile event
-    transferPlayer() {
+    transferPlayer(): void {
       // console.log("emitting map change to 1!")
-      this.emitMapChange("1")
+      this.emitMapChange('1')
       // const updatedMap = this.getCurrentMapID()
       // console.log("current map: ", updatedMap)
       // emit movement to new map spawn point
       // emit 
     }
 
+  // updatePlayerVisibility(mapID: CoveyTownMapID): void {
+  //   // add filter step here for players not in current map
+  //   this.currentMapID = mapID
+  //   console.log(`my map ${this.currentMapID}`)
+  //   console.log('players to filter')
+  //   console.log(this.players)
+  //   const playersToRemove = this.players.filter(
+  //     (player) => {
+  //       console.log(`player map: ${player.mapID}, current map: ${this.currentMapID}`)
+  //       return player.mapID !== this.currentMapID
+  //     }
+  //   );
+  //   // reset all players to visible
+  //   this.players.forEach((player) => {
+  //     if (player.sprite) {
+  //       player.sprite?.setVisible(true)
+  //       player.label?.setVisible(true)
+  //     }
+  //   });
+  //   console.log('players to remove')
+  //   console.log(playersToRemove)
+  //   // set players not in current map to invisible
+  //   playersToRemove.forEach((playerToRemove) => {
+  //     // if (playerToRemove.sprite) {
+  //     //   playerToRemove.sprite.destroy();
+  //     //   playerToRemove.label?.destroy();
+  //     // }
+  //     console.log('removing player')
+  //     console.log(playerToRemove)
+  //     console.log(playerToRemove.sprite)
+  //     if (playerToRemove.sprite) {
+        
+  //       playerToRemove.sprite?.setVisible(false)
+  //       playerToRemove.label?.setVisible(false)
+  //     }
+  //   });
+  //   // if (playersToRemove.length) {
+  //   //   this.players = this.players.filter(
+  //   //     (player) => !playersToRemove.find(
+  //   //       (p) => p.id === player.id,
+  //   //     ),
+  //   //   );
+  //   // }
+  //   console.log('players after filter')
+  //   console.log(this.players)
+  // }
 
-  updatePlayersLocations(players: Player[]) {
+  updatePlayersLocations(players: Player[]): void {
+    // console.log('updating player locations')
     if (!this.ready) {
       this.players = players;
       return;
@@ -101,41 +148,13 @@ export default class CoveySuperMapScene extends Phaser.Scene {
         ),
       );
     }
-
-    // add filter step here for players not in current map
-    const playersToRemove = this.players.filter(
-      (player) => player.mapID !== this.currentMapID
-    );
-    // reset all players to visible
-    this.players.forEach((player) => {
-      if (player.sprite) {
-        player.sprite?.setVisible(true)
-        player.label?.setVisible(true)
-      }
-    });
-    // set players not in current map to invisible
-    playersToRemove.forEach((playerToRemove) => {
-      // if (playerToRemove.sprite) {
-      //   playerToRemove.sprite.destroy();
-      //   playerToRemove.label?.destroy();
-      // }
-      if (playerToRemove.sprite) {
-        playerToRemove.sprite?.setVisible(false)
-        playerToRemove.label?.setVisible(false)
-      }
-    });
-    // if (playersToRemove.length) {
-    //   this.players = this.players.filter(
-    //     (player) => !playersToRemove.find(
-    //       (p) => p.id === player.id,
-    //     ),
-    //   );
-    // }
   }
 
-  updatePlayerLocation(player: Player) {
+  updatePlayerLocation(player: Player): void {
       let myPlayer = this.players.find((p) => p.id === player.id);
+      // console.log('updating a location for a player')
       if (!myPlayer) {
+        console.log(`cant find player ${player.id}`)
         let { location, mapID } = player;
         if (!location) {
           location = {
@@ -154,7 +173,10 @@ export default class CoveySuperMapScene extends Phaser.Scene {
       }
       if (this.id !== myPlayer.id && this.physics && player.location) {
         let { sprite } = myPlayer;
-        if (!sprite) {
+        // DEBUG: create a new sprite if we loose the animation state.
+        // not 100% sure how this works , but changing scenes seems to remove the annimation state on other players
+        // spritte wont display if anniation state undefined, so recreate it if we dont have it
+        if (!sprite || !sprite.anims) {
           sprite = this.physics.add
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore - JB todo
@@ -168,6 +190,17 @@ export default class CoveySuperMapScene extends Phaser.Scene {
           });
           myPlayer.label = label;
           myPlayer.sprite = sprite;
+        }
+        // DEBUG: update players gets called anytime we move a player or map changes
+        // probably not a difference if we do the filtering here or above like we had it, this is just the last iteration i had working
+        if (myPlayer.sprite) {
+          if (myPlayer.mapID === this.currentMapID) {
+            myPlayer.sprite.setVisible(true)
+            myPlayer.label?.setVisible(true)
+          } else {
+            myPlayer.sprite.setVisible(false)
+            myPlayer.label?.setVisible(false)
+          }
         }
         if (!sprite.anims) return;
         sprite.setX(player.location.x);
@@ -183,7 +216,7 @@ export default class CoveySuperMapScene extends Phaser.Scene {
       }
     }
 
-    getNewMovementDirection() {
+    getNewMovementDirection(): Direction | undefined {
       if (this.cursors.find(keySet => keySet.left?.isDown)) {
         return 'left';
       }
@@ -199,7 +232,7 @@ export default class CoveySuperMapScene extends Phaser.Scene {
       return undefined;
     }
 
-    update() {
+    update(): void {
       if (this.paused) {
         return;
       }
@@ -290,7 +323,7 @@ export default class CoveySuperMapScene extends Phaser.Scene {
       }
     }
 
-    create() {
+    create(): void {
       this.map = this.make.tilemap({ key: 'map' });
       const {map} = this;
 
@@ -509,13 +542,13 @@ export default class CoveySuperMapScene extends Phaser.Scene {
       }
     }
 
-    pause() {
+    pause(): void {
       this.paused = true;
       this.previouslyCapturedKeys = this.input.keyboard.getCaptures();
       this.input.keyboard.clearCaptures();
     }
 
-    resume() {
+    resume(): void {
       this.paused = false;
       // this.input.keyboard.addCapture(this.previouslyCapturedKeys);
       if(Video.instance()){

@@ -124,13 +124,13 @@ export default class CoveySuperMapScene extends Phaser.Scene {
         playerToRemove.label?.setVisible(false)
       }
     });
-    if (playersToRemove.length) {
-      this.players = this.players.filter(
-        (player) => !playersToRemove.find(
-          (p) => p.id === player.id,
-        ),
-      );
-    }
+    // if (playersToRemove.length) {
+    //   this.players = this.players.filter(
+    //     (player) => !playersToRemove.find(
+    //       (p) => p.id === player.id,
+    //     ),
+    //   );
+    // }
   }
 
   updatePlayerLocation(player: Player) {

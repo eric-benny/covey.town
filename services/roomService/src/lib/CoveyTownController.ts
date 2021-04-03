@@ -129,7 +129,7 @@ export default class CoveyTownController {
    */
   updatePlayerMap(player: Player, mapID: CoveyTownMapID): void {
     player.updateMapId(mapID);
-    this._listeners.forEach((listener) => listener.onPlayerMapChange(player));
+    this._listeners.forEach((listener) => listener.onPlayerMapChanged(player));
   }
 
   /**

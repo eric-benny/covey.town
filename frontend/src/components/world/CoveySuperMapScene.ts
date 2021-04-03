@@ -8,7 +8,7 @@ export default class CoveySuperMapScene extends Phaser.Scene {
   protected tilemap: string;
 
   // added to use for filtering of other players by map
-  private playerID: string;
+  private currentMapID: string;
 
   private player?: {
     sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody, label: Phaser.GameObjects.Text
@@ -42,14 +42,13 @@ export default class CoveySuperMapScene extends Phaser.Scene {
   // JP: Moved map to a field to allow map's properties to be referenced from update()
   private map?: Phaser.Tilemaps.Tilemap;
 
-    constructor(video: Video, emitMovement: (loc: UserLocation) => void, emitMapChange: (map: CoveyTownMapID) => void, playerID: string) {
+    constructor(video: Video, emitMovement: (loc: UserLocation) => void, emitMapChange: (map: CoveyTownMapID) => void, mapID: string) {
       super('PlayGame');
       this.video = video;
       this.emitMovement = emitMovement;
       this.emitMapChange = emitMapChange;
-      this.playerID = playerID;
+      this.currentMapID = mapID;
       this.tilemap = 'tuxmon-sample-32px-extruded'
-
     }
 
     preload() {
@@ -60,17 +59,17 @@ export default class CoveySuperMapScene extends Phaser.Scene {
     }
 
 
-    getCurrentMapID() {
-      const myPlayer = this.players.find((player) => player.id === this.playerID)
-      return myPlayer?.mapID
-    }
+    // getCurrentMapID() {
+    //   const myPlayer = this.players.find((player) => player.id === this.playerID)
+    //   return myPlayer?.mapID
+    // }
 
     // MD added transfer player function to handle trigger tile event
     transferPlayer() {
-      console.log("emitting map change to 1!")
+      // console.log("emitting map change to 1!")
       this.emitMapChange("1")
-      const updatedMap = this.getCurrentMapID()
-      console.log("current map: ", updatedMap)
+      // const updatedMap = this.getCurrentMapID()
+      // console.log("current map: ", updatedMap)
       // emit movement to new map spawn point
       // emit 
     }
@@ -104,23 +103,34 @@ export default class CoveySuperMapScene extends Phaser.Scene {
     }
 
     // add filter step here for players not in current map
-    const currentMap = this.getCurrentMapID();
     const playersToRemove = this.players.filter(
-      (player) => player.mapID !== currentMap
+      (player) => player.mapID !== this.currentMapID
     );
-    playersToRemove.forEach((playerToRemove) => {
-      if (playerToRemove.sprite) {
-        playerToRemove.sprite.destroy();
-        playerToRemove.label?.destroy();
+    // reset all players to visible
+    this.players.forEach((player) => {
+      if (player.sprite) {
+        player.sprite?.setVisible(true)
+        player.label?.setVisible(true)
       }
     });
-    if (playersToRemove.length) {
-      this.players = this.players.filter(
-        (player) => !playersToRemove.find(
-          (p) => p.id === player.id,
-        ),
-      );
-    }
+    // set players not in current map to invisible
+    playersToRemove.forEach((playerToRemove) => {
+      // if (playerToRemove.sprite) {
+      //   playerToRemove.sprite.destroy();
+      //   playerToRemove.label?.destroy();
+      // }
+      if (playerToRemove.sprite) {
+        playerToRemove.sprite?.setVisible(false)
+        playerToRemove.label?.setVisible(false)
+      }
+    });
+    // if (playersToRemove.length) {
+    //   this.players = this.players.filter(
+    //     (player) => !playersToRemove.find(
+    //       (p) => p.id === player.id,
+    //     ),
+    //   );
+    // }
   }
 
   updatePlayerLocation(player: Player) {
@@ -275,9 +285,7 @@ export default class CoveySuperMapScene extends Phaser.Scene {
           && body.x < br.x
           && body.y > tl.y
           && body.y < br.y) {
-            // TODO Change
             this.transferPlayer() // MD added function call to handle trigger tile event
-            console.log("Change me!");
           }
       }
     }
@@ -509,7 +517,11 @@ export default class CoveySuperMapScene extends Phaser.Scene {
 
     resume() {
       this.paused = false;
-      this.input.keyboard.addCapture(this.previouslyCapturedKeys);
+      // this.input.keyboard.addCapture(this.previouslyCapturedKeys);
+      if(Video.instance()){
+        // If the game is also in process of being torn down, the keyboard could be undefined
+        this.input.keyboard.addCapture(this.previouslyCapturedKeys);
+      }
       this.previouslyCapturedKeys = [];
     }
   }

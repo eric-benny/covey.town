@@ -152,9 +152,7 @@ export default class CoveySuperMapScene extends Phaser.Scene {
 
   updatePlayerLocation(player: Player): void {
       let myPlayer = this.players.find((p) => p.id === player.id);
-      // console.log('updating a location for a player')
       if (!myPlayer) {
-        console.log(`cant find player ${player.id}`)
         let { location, mapID } = player;
         if (!location) {
           location = {
@@ -172,6 +170,12 @@ export default class CoveySuperMapScene extends Phaser.Scene {
         this.players.push(myPlayer);
       }
       if (this.id !== myPlayer.id && this.physics && player.location) {
+        // DEBUG: set the player location and mapID
+        // this brings this.players in line with state players, preventing continuous emitting of player movement and correct mapID
+        myPlayer.location = player.location
+        if (player.mapID) {
+          myPlayer.mapID = player.mapID
+        }
         let { sprite } = myPlayer;
         // DEBUG: create a new sprite if we loose the animation state.
         // not 100% sure how this works , but changing scenes seems to remove the annimation state on other players

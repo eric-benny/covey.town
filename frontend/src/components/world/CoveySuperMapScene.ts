@@ -289,7 +289,8 @@ export default class CoveySuperMapScene extends Phaser.Scene {
         this.player.label.setY(body.y - 20);
         if (!this.lastLocation
           || this.lastLocation.x !== body.x
-          || this.lastLocation.y !== body.y || this.lastLocation.rotation !== primaryDirection
+          || this.lastLocation.y !== body.y
+          || (isMoving && this.lastLocation.rotation !== primaryDirection)
           || this.lastLocation.moving !== isMoving) {
           if (!this.lastLocation) {
             this.lastLocation = {

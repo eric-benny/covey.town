@@ -30,5 +30,5 @@ export default interface CoveyTownListener {
   /**
    * Called when a player moves to a sub map
    */
-  onPlayerMapChange(migratedPlayer: Player): void;
+  onPlayerMapChanged(migratedPlayer: Player): void;
 }

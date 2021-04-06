@@ -190,8 +190,8 @@ function townSocketAdapter(socket: Socket): CoveyTownListener {
       socket.emit('townClosing');
       socket.disconnect(true);
     },
-    onPlayerMapChange(migratedPlayer: Player) {
-      socket.emit('playerMapChange', migratedPlayer);
+    onPlayerMapChanged(migratedPlayer: Player) {
+      socket.emit('playerMapChanged', migratedPlayer);
     },
   };
 }
@@ -238,7 +238,7 @@ export function townSubscriptionHandler(socket: Socket): void {
 
   // Register an event listener for the client socket: if the client updates their
   // map, inform the CoveyTownController
-  socket.on('playerMapChange', (mapID: CoveyTownMapID) => {
+  socket.on('playerMigration', (mapID: CoveyTownMapID) => {
     townController.updatePlayerMap(s.player, mapID);
   });
 }

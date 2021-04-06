@@ -8,24 +8,24 @@ export default class CoveySubMapScene extends CoveySuperMapScene {
 
   // constructor takes values from CoveySuperMapScene can include additional properties above
   // and parameters if needed.
-  constructor(video: Video, emitMovement: (loc:UserLocation) => void, emitMapChange: (map: CoveyTownMapID) => void, playerID: string) {
-    super(video, emitMovement, emitMapChange, playerID);
+  constructor(video: Video, emitMovement: (loc:UserLocation) => void, emitMapChange: (map: CoveyTownMapID) => void, mapID: string) {
+    super(video, emitMovement, emitMapChange, mapID);
     this.tilemap = 'pokemon_big'
   }
 
   // updated preload with tilemaps specific to subMap tilesets
-  preload() {
+  preload(): void {
     this.load.image('tiles', '/assets/tilesets/pokemon_big.png');
     this.load.tilemapTiledJSON('map', '/assets/tilemaps/indoors.json');
     this.load.atlas('atlas', '/assets/atlas/atlas.png', '/assets/atlas/atlas.json');
   }
 
   // MD added transfer player function to handle trigger tile event
-  transferPlayer() {
-    console.log("emitting map change to 0!")
+  transferPlayer(): void {
+    // console.log("emitting map change to 0!")
     this.emitMapChange("0")
-    const updatedMap = this.getCurrentMapID()
-    console.log("current map: ", updatedMap)
+    // const updatedMap = this.getCurrentMapID()
+    // console.log("current map: ", updatedMap)
     // emit movement to new map spawn point
     // emit 
   }

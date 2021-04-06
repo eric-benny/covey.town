@@ -20,7 +20,7 @@ function mockCoveyListener(): CoveyTownListener {
     onPlayerJoined(newPlayer: Player) {
       mockCoveyListenerOtherFns(newPlayer);
     },
-    onPlayerMapChange(migratedPlayer: Player): void {
+    onPlayerMapChanged(migratedPlayer: Player): void {
       mockCoveyListenerOtherFns(migratedPlayer);
     },
   };

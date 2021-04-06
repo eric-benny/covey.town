@@ -87,10 +87,10 @@ describe('CoveyTownController', () => {
       newController.addTownListener(mockListeners[2]);
       newController.updatePlayerMap(playerToMigrate, '0');
 
-      expect(mockListeners[0].onPlayerMapChange).toHaveBeenCalledWith(playerToMigrate);
-      expect(mockListeners[0].onPlayerMapChange).toBeCalledTimes(2);
-      expect(mockListeners[2].onPlayerMapChange).toHaveBeenCalledWith(playerToMigrate);
-      expect(mockListeners[1].onPlayerMapChange).toBeCalledTimes(0);
+      expect(mockListeners[0].onPlayerMapChanged).toHaveBeenCalledWith(playerToMigrate);
+      expect(mockListeners[0].onPlayerMapChanged).toBeCalledTimes(2);
+      expect(mockListeners[2].onPlayerMapChanged).toHaveBeenCalledWith(playerToMigrate);
+      expect(mockListeners[1].onPlayerMapChanged).toBeCalledTimes(0);
     });
     it('should notify added listeners of player disconnections when destroySession is called', async () => {
       const player = new Player('test player');

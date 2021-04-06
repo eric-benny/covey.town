@@ -62,7 +62,7 @@ export default function WorldMap(): JSX.Element {
   const deepPlayers = JSON.stringify(players);
   useEffect(() => {
     gameScene?.updatePlayersLocations(players);
-  }, [players, deepPlayers, gameScene]);
+  }, [players, deepPlayers, gameScene, currentMapID]);
 
   return <div id="map-container"/>;
 }

@@ -14,14 +14,14 @@ export default class CoveySubMapScene extends CoveySuperMapScene {
   }
 
   // updated preload with tilemaps specific to subMap tilesets
-  preload() {
+  preload(): void {
     this.load.image('tiles', '/assets/tilesets/pokemon_big.png');
     this.load.tilemapTiledJSON('map', '/assets/tilemaps/indoors.json');
     this.load.atlas('atlas', '/assets/atlas/atlas.png', '/assets/atlas/atlas.json');
   }
 
   // MD added transfer player function to handle trigger tile event
-  transferPlayer() {
+  transferPlayer(): void {
     // console.log("emitting map change to 0!")
     this.emitMapChange("0")
     // const updatedMap = this.getCurrentMapID()

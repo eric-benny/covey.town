@@ -42,84 +42,37 @@ export default class CoveySuperMapScene extends Phaser.Scene {
   // JP: Moved map to a field to allow map's properties to be referenced from update()
   private map?: Phaser.Tilemaps.Tilemap;
 
-    constructor(video: Video, emitMovement: (loc: UserLocation) => void, emitMapChange: (map: CoveyTownMapID) => void, mapID: string) {
-      super('PlayGame');
-      this.video = video;
-      this.emitMovement = emitMovement;
-      this.emitMapChange = emitMapChange;
-      this.currentMapID = mapID;
-      this.tilemap = 'tuxmon-sample-32px-extruded'
-    }
+  constructor(video: Video, emitMovement: (loc: UserLocation) => void, emitMapChange: (map: CoveyTownMapID) => void, mapID: string) {
+    super('PlayGame');
+    this.video = video;
+    this.emitMovement = emitMovement;
+    this.emitMapChange = emitMapChange;
+    this.currentMapID = mapID;
+    this.tilemap = 'tuxmon-sample-32px-extruded'
+  }
 
-    preload(): void {
-      // this.load.image("logo", logoImg);
-      this.load.image('tiles', '/assets/tilesets/tuxmon-sample-32px-extruded.png');
-      this.load.tilemapTiledJSON('map', '/assets/tilemaps/tuxemon-town.json');
-      this.load.atlas('atlas', '/assets/atlas/atlas.png', '/assets/atlas/atlas.json');
-    }
+  preload(): void {
+    // this.load.image("logo", logoImg);
+    this.load.image('tiles', '/assets/tilesets/tuxmon-sample-32px-extruded.png');
+    this.load.tilemapTiledJSON('map', '/assets/tilemaps/tuxemon-town.json');
+    this.load.atlas('atlas', '/assets/atlas/atlas.png', '/assets/atlas/atlas.json');
+  }
 
 
-    // getCurrentMapID() {
-    //   const myPlayer = this.players.find((player) => player.id === this.playerID)
-    //   return myPlayer?.mapID
-    // }
-
-    // MD added transfer player function to handle trigger tile event
-    transferPlayer(): void {
-      // console.log("emitting map change to 1!")
-      this.emitMapChange('1')
-      // const updatedMap = this.getCurrentMapID()
-      // console.log("current map: ", updatedMap)
-      // emit movement to new map spawn point
-      // emit 
-    }
-
-  // updatePlayerVisibility(mapID: CoveyTownMapID): void {
-  //   // add filter step here for players not in current map
-  //   this.currentMapID = mapID
-  //   console.log(`my map ${this.currentMapID}`)
-  //   console.log('players to filter')
-  //   console.log(this.players)
-  //   const playersToRemove = this.players.filter(
-  //     (player) => {
-  //       console.log(`player map: ${player.mapID}, current map: ${this.currentMapID}`)
-  //       return player.mapID !== this.currentMapID
-  //     }
-  //   );
-  //   // reset all players to visible
-  //   this.players.forEach((player) => {
-  //     if (player.sprite) {
-  //       player.sprite?.setVisible(true)
-  //       player.label?.setVisible(true)
-  //     }
-  //   });
-  //   console.log('players to remove')
-  //   console.log(playersToRemove)
-  //   // set players not in current map to invisible
-  //   playersToRemove.forEach((playerToRemove) => {
-  //     // if (playerToRemove.sprite) {
-  //     //   playerToRemove.sprite.destroy();
-  //     //   playerToRemove.label?.destroy();
-  //     // }
-  //     console.log('removing player')
-  //     console.log(playerToRemove)
-  //     console.log(playerToRemove.sprite)
-  //     if (playerToRemove.sprite) {
-        
-  //       playerToRemove.sprite?.setVisible(false)
-  //       playerToRemove.label?.setVisible(false)
-  //     }
-  //   });
-  //   // if (playersToRemove.length) {
-  //   //   this.players = this.players.filter(
-  //   //     (player) => !playersToRemove.find(
-  //   //       (p) => p.id === player.id,
-  //   //     ),
-  //   //   );
-  //   // }
-  //   console.log('players after filter')
-  //   console.log(this.players)
+  // getCurrentMapID() {
+  //   const myPlayer = this.players.find((player) => player.id === this.playerID)
+  //   return myPlayer?.mapID
   // }
+
+  // MD added transfer player function to handle trigger tile event
+  transferPlayer(): void {
+    // console.log("emitting map change to 1!")
+    this.emitMapChange('1')
+    // const updatedMap = this.getCurrentMapID()
+    // console.log("current map: ", updatedMap)
+    // emit movement to new map spawn point
+    // emit 
+  }
 
   updatePlayersLocations(players: Player[]): void {
     // console.log('updating player locations')
@@ -170,16 +123,16 @@ export default class CoveySuperMapScene extends Phaser.Scene {
         this.players.push(myPlayer);
       }
       if (this.id !== myPlayer.id && this.physics && player.location) {
-        // DEBUG: set the player location and mapID
-        // this brings this.players in line with state players, preventing continuous emitting of player movement and correct mapID
+        // set the player location and mapID
+        // this brings this.players in line with state players, ensuring correct mapID
         myPlayer.location = player.location
         if (player.mapID) {
           myPlayer.mapID = player.mapID
         }
         let { sprite } = myPlayer;
-        // DEBUG: create a new sprite if we loose the animation state.
-        // not 100% sure how this works , but changing scenes seems to remove the annimation state on other players
-        // spritte wont display if anniation state undefined, so recreate it if we dont have it
+        // Create a new sprite if we loose the animation state.
+        // Changing scenes seems to remove the annimation state on other players
+        // sprite wont display if anniation state undefined, so recreate it if we dont have it
         if (!sprite || !sprite.anims) {
           sprite = this.physics.add
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -195,8 +148,7 @@ export default class CoveySuperMapScene extends Phaser.Scene {
           myPlayer.label = label;
           myPlayer.sprite = sprite;
         }
-        // DEBUG: update players gets called anytime we move a player or map changes
-        // probably not a difference if we do the filtering here or above like we had it, this is just the last iteration i had working
+        // Update the visibility of other players so that the player only sees other players on the same map
         if (myPlayer.sprite) {
           if (myPlayer.mapID === this.currentMapID) {
             myPlayer.sprite.setVisible(true)

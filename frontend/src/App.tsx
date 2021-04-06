@@ -122,9 +122,9 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
     case 'addPlayer':
       nextState.players = nextState.players.concat([update.player]);
       break;
-    // DEBUG: also update map ID. actions aren't syncronous and I think the player moved and player map changed were overlapping
-    // we end up just getting the player moved update, and miss the map change
-    // this ensures we always get the correct map from the backend
+    // Update map ID in addition to location. Actions aren't syncronous and the player moved and player map changed can overlap
+    // We end up just getting the player moved update, and miss the map change
+    // This ensures we always get the correct map from the backend
     case 'playerMoved':
       updatePlayer = nextState.players.find((p) => p.id === update.player.id);
       if (updatePlayer) {

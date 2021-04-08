@@ -26,11 +26,11 @@ export default class CoveySuperMapScene extends Phaser.Scene {
 
   private cursors: Phaser.Types.Input.Keyboard.CursorKeys[] = [];
 
-    /*
-     * A "captured" key doesn't send events to the browser - they are trapped by Phaser
-     * When pausing the game, we uncapture all keys, and when resuming, we re-capture them.
-     * This is the list of keys that are currently captured by Phaser.
-     */
+  /*
+  * A "captured" key doesn't send events to the browser - they are trapped by Phaser
+  * When pausing the game, we uncapture all keys, and when resuming, we re-capture them.
+  * This is the list of keys that are currently captured by Phaser.
+  */
   private previouslyCapturedKeys: number[] = [];
 
   private lastLocation?: UserLocation;
@@ -216,7 +216,7 @@ export default class CoveySuperMapScene extends Phaser.Scene {
           default:
             // Not moving
             this.player.sprite.anims.stop();
-            // If we were moving, pick and idle frame to use
+            // If we were moving, pick an idle frame to use
             if (prevVelocity.x < 0) {
               this.player.sprite.setTexture('atlas', 'misa-left');
             } else if (prevVelocity.x > 0) {
@@ -311,9 +311,9 @@ export default class CoveySuperMapScene extends Phaser.Scene {
       // but for debugging, you can comment out that line.
       transporters.forEach(transporter => {
           const sprite = transporter as Phaser.GameObjects.Sprite;
-          sprite.y += 2 * sprite.height; // Phaser and Tiled seem to disagree on which corner is y
-          sprite.setVisible(false); // Comment this out to see the transporter rectangles drawn on
-                                    // the map
+          // Phaser and Tiled seem to disagree on which corner is y
+          sprite.y += 2 * sprite.height;
+          sprite.setVisible(false);
         }
       );
 
@@ -326,7 +326,6 @@ export default class CoveySuperMapScene extends Phaser.Scene {
           })
         }
       });
-
 
 
       const cursorKeys = this.input.keyboard.createCursorKeys();
@@ -343,8 +342,6 @@ export default class CoveySuperMapScene extends Phaser.Scene {
         'left': Phaser.Input.Keyboard.KeyCodes.K,
         'right': Phaser.Input.Keyboard.KeyCodes.L
       }, false) as Phaser.Types.Input.Keyboard.CursorKeys);
-
-
 
 
       // Create a sprite with physics enabled via the physics system. The image used for the sprite
@@ -487,8 +484,6 @@ export default class CoveySuperMapScene extends Phaser.Scene {
 
       this.ready = true;
       if (this.players.length) {
-        // Some players got added to the queue before we were ready, make sure that they have
-        // sprites....
         this.players.forEach((p) => this.updatePlayerLocation(p));
       }
     }

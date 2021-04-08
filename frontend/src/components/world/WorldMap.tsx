@@ -44,7 +44,8 @@ export default function WorldMap(): JSX.Element {
       physics: {
         default: 'arcade',
         arcade: {
-          gravity: { y: 0 }, // Top down game, so no gravity
+          // Top down game, so no gravity
+          gravity: { y: 0 },
         },
       },
     };

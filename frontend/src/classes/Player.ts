@@ -5,7 +5,6 @@ export default class Player {
 
   private readonly _userName: string;
 
-  // mapID field added by MD, modified to public by EB
   public mapID?: CoveyTownMapID;
 
   public sprite?: Phaser.GameObjects.Sprite;
@@ -16,7 +15,6 @@ export default class Player {
     this._id = id;
     this._userName = userName;
     this.location = location;
-    // mapID added to constructor by MD, modified to public by EB
     this.mapID = mapID;
   }
 
@@ -28,12 +26,11 @@ export default class Player {
     return this._id;
   }
 
-  // updated to include new mapID parameter by MD
   static fromServerPlayer(playerFromServer: ServerPlayer): Player {
     return new Player(playerFromServer._id, playerFromServer._userName, playerFromServer.location, playerFromServer.mapID);
   }
 }
-// server player updated to include mapID by MD
+
 export type ServerPlayer = { _id: string, _userName: string, location: UserLocation, mapID: CoveyTownMapID };
 
 export type Direction = 'front'|'back'|'left'|'right';

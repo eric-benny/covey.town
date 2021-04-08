@@ -77,6 +77,19 @@ describe('TownServiceApiSocket', () => {
     expect(movedPlayer.location).toMatchObject(newLocation);
     expect(otherMovedPlayer.location).toMatchObject(newLocation);
   });
+  it('Dispatches migration updates to all clients in the same town', async () => {
+    const town = await createTownForTesting();
+    const joinData = await apiClient.joinTown({coveyTownID: town.coveyTownID, userName: nanoid()});
+    const joinData2 = await apiClient.joinTown({coveyTownID: town.coveyTownID, userName: nanoid()});
+    const joinData3 = await apiClient.joinTown({coveyTownID: town.coveyTownID, userName: nanoid()});
+    const socketSender = TestUtils.createSocketClient(server, joinData.coveySessionToken, town.coveyTownID).socket;
+    const {playerMigrated} = TestUtils.createSocketClient(server, joinData2.coveySessionToken, town.coveyTownID);
+    const {playerMigrated: playerMigrated2} = TestUtils.createSocketClient(server, joinData3.coveySessionToken, town.coveyTownID);
+    socketSender.emit('playerMigration', '1');
+    const [migratedPlayer, otherMigratedPlayer]= await Promise.all([playerMigrated, playerMigrated2]);
+    expect(migratedPlayer.mapID).toBe('1');
+    expect(otherMigratedPlayer.mapID).toBe('1');
+  });
   it('Invalidates the user session after disconnection', async () => {
     // This test will timeout if it fails - it will never reach the expectation
     const town = await createTownForTesting();

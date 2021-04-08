@@ -77,8 +77,7 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
     apiClient: state.apiClient,
   };
 
-  // Function which calculates nearby players
-  // Updated to account for sub maps
+  // Function which calculates nearby players; accounts for sub maps
   function calculateNearbyPlayers(players: Player[], currentLocation: UserLocation, currentMapID: CoveyTownMapID) {
     const isWithinCallRadius = (p: Player, location: UserLocation) => {
       if (p.location && location) {
@@ -122,7 +121,7 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
     case 'addPlayer':
       nextState.players = nextState.players.concat([update.player]);
       break;
-    // Update map ID in addition to location. Actions aren't syncronous and the player moved and player map changed can overlap
+    // Update map ID in addition to location. Actions aren't synchronous and the player moved and player map changed can overlap
     // We end up just getting the player moved update, and miss the map change
     // This ensures we always get the correct map from the backend
     case 'playerMoved':

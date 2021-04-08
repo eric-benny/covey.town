@@ -6,26 +6,20 @@ import useCoveyAppState from '../../hooks/useCoveyAppState';
 import CoveySuperMapScene from './CoveySuperMapScene';
 import CoveySubMapScene from './CoveySubMapScene';
 
-// MD added emitMapChange parameter to pass to scene constructor
 function createMapScene(video: Video, emitMovement: (location: UserLocation) => void, 
                         emitMapChange: (map: CoveyTownMapID) => void, currentMapID: CoveyTownMapID) {
 
-  // MD updated map call logic
   if (currentMapID === '1') {
     return new CoveySubMapScene(video, emitMovement, emitMapChange, currentMapID)
   }
   return new CoveySuperMapScene(video, emitMovement, emitMapChange, currentMapID)
 }
 
-// MD extracted emitMapChange, mapID from state
 export default function WorldMap(): JSX.Element {
   const video = Video.instance();
   const {
     emitMovement, players, emitMapChange, currentMapID
   } = useCoveyAppState();
-
-// get my player from player array
-// const myPlayer = players.find((player) => player.id === myPlayerID)
 
   const [gameScene, setGameScene] = useState<CoveySuperMapScene>();
   useEffect(() => {
@@ -37,7 +31,8 @@ export default function WorldMap(): JSX.Element {
       physics: {
         default: 'arcade',
         arcade: {
-          gravity: { y: 0 }, // Top down game, so no gravity
+          // Top down game, so no gravity
+          gravity: { y: 0 },
         },
       },
     };
@@ -57,7 +52,7 @@ export default function WorldMap(): JSX.Element {
     return () => {
       game.destroy(true);
     };
-  }, [video, emitMovement, emitMapChange, currentMapID]); // emitMapChange dependency added by MD
+  }, [video, emitMovement, emitMapChange, currentMapID]);
 
   const deepPlayers = JSON.stringify(players);
   useEffect(() => {

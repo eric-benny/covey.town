@@ -90,24 +90,3 @@ export function setSessionTokenAndTownID(coveyTownID: string, sessionToken: stri
   // eslint-disable-next-line
   socket.handshake.auth = {token: sessionToken, coveyTownID};
 }
-
-// export async function getListOfPublicTownNames(client: TownServiceClient): Promise<string[]> {
-//   const townsResponse = await client.listTowns();
-//   const townNames = townsResponse.towns.map((town) => town.friendlyName);
-//   return townNames;
-// }
-
-// export async function getListOfPublicTownIDs(client: TownServiceClient): Promise<string[]> {
-//   const townsResponse = await client.listTowns();
-//   const townIDs = townsResponse.towns.map((town) => town.coveyTownID);
-//   return townIDs;
-// }
-
-// export async function getNameFromTownID(client: TownServiceClient, id: string): Promise<string> {
-//   const townsResponse = await client.listTowns();
-//   const foundTown = townsResponse.towns.find((town) => town.coveyTownID === id);
-//   if (foundTown) {
-//     return foundTown.friendlyName;
-//   }
-//   return '';
-// }

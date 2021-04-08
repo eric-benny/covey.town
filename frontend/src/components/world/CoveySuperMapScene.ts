@@ -1,13 +1,19 @@
 import Phaser from 'phaser';
 import Player, { CoveyTownMapID, Direction, UserLocation } from '../../classes/Player';
 import Video from '../../classes/Video/Video';
-// import useCoveyAppState from '../../hooks/useCoveyAppState';
+
+/*
+ This class has been refactored to CoveySuperMapScene from CoveyGameScene. This class represents
+ the main Covey.Town overworld, from which players can enter submaps (buildings). 
+*/
 
 export default class CoveySuperMapScene extends Phaser.Scene {
-  // added field here, so subMap can initialize this property to the tile map specific to the subMap
+
+  // Property added to allow maps to initialize this value on construction, and prevent the need
+  // to hard-code it below
   protected tilemap: string;
 
-  // added to use for filtering of other players by map
+  // Property added to allow the value to be accessible to all class methods
   private currentMapID: string;
 
   private player?: {
@@ -39,7 +45,7 @@ export default class CoveySuperMapScene extends Phaser.Scene {
 
   protected emitMapChange: (map: CoveyTownMapID) => void; // MD set to protected
 
-  // JP: Moved map to a field to allow map's properties to be referenced from update()
+  // Property added to allow Phaser map object to be accessible from the update function, defined below
   private map?: Phaser.Tilemaps.Tilemap;
 
   constructor(video: Video, emitMovement: (loc: UserLocation) => void, emitMapChange: (map: CoveyTownMapID) => void, mapID: string) {
@@ -58,24 +64,13 @@ export default class CoveySuperMapScene extends Phaser.Scene {
     this.load.atlas('atlas', '/assets/atlas/atlas.png', '/assets/atlas/atlas.json');
   }
 
-
-  // getCurrentMapID() {
-  //   const myPlayer = this.players.find((player) => player.id === this.playerID)
-  //   return myPlayer?.mapID
-  // }
-
-  // MD added transfer player function to handle trigger tile event
+  // Function added to emit the map change value; can be overridded in extending classes to pass
+  // different values based on the destination map
   transferPlayer(): void {
-    // console.log("emitting map change to 1!")
     this.emitMapChange('1')
-    // const updatedMap = this.getCurrentMapID()
-    // console.log("current map: ", updatedMap)
-    // emit movement to new map spawn point
-    // emit 
   }
 
   updatePlayersLocations(players: Player[]): void {
-    // console.log('updating player locations')
     if (!this.ready) {
       this.players = players;
       return;
@@ -118,7 +113,7 @@ export default class CoveySuperMapScene extends Phaser.Scene {
         if (!mapID) {
           mapID = '0';
         }
-        // MD added mapID to Player call
+        // mapID has been added to the Player constructor
         myPlayer = new Player(player.id, player.userName, location, mapID);
         this.players.push(myPlayer);
       }
@@ -148,7 +143,7 @@ export default class CoveySuperMapScene extends Phaser.Scene {
           myPlayer.label = label;
           myPlayer.sprite = sprite;
         }
-        // Update the visibility of other players so that the player only sees other players on the same map
+        // Update the visibility of other players so that only players on the current map are visible
         if (myPlayer.sprite) {
           if (myPlayer.mapID === this.currentMapID) {
             myPlayer.sprite.setVisible(true)
@@ -259,23 +254,22 @@ export default class CoveySuperMapScene extends Phaser.Scene {
           this.emitMovement(this.lastLocation);
         }
 
-
-        // JP: Establishes the top-left of the doorway on the town map
+        // Establishes the top-left position of the doorway on the town map
         const tl = this.map?.findObject('Objects',
         (obj) => obj.name === 'DoorTopLeft') as unknown as
         Phaser.GameObjects.Components.Transform;
 
-        // JP: Establishes the bottom-right of the doorway on the town map
+        // Establishes the bottom-right position of the doorway on the town map
         const br = this.map?.findObject('Objects',
         (obj) => obj.name === 'DoorBottomRight') as unknown as
         Phaser.GameObjects.Components.Transform;
 
-        // JP: Checks if user's body is in the doorway
+        // Checks if user's body is in the doorway, and if so, transfers player to alternate map
         if (body.x > tl.x
           && body.x < br.x
           && body.y > tl.y
           && body.y < br.y) {
-            this.transferPlayer() // MD added function call to handle trigger tile event
+            this.transferPlayer()
           }
       }
     }
@@ -507,7 +501,6 @@ export default class CoveySuperMapScene extends Phaser.Scene {
 
     resume(): void {
       this.paused = false;
-      // this.input.keyboard.addCapture(this.previouslyCapturedKeys);
       if(Video.instance()){
         // If the game is also in process of being torn down, the keyboard could be undefined
         this.input.keyboard.addCapture(this.previouslyCapturedKeys);

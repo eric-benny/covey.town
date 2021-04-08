@@ -6,6 +6,18 @@ import useCoveyAppState from '../../hooks/useCoveyAppState';
 import CoveySuperMapScene from './CoveySuperMapScene';
 import CoveySubMapScene from './CoveySubMapScene';
 
+/*
+ Note: CoveySuperMapScene (formerly CoveyGameScene) class definition has been moved to its own file
+ (CoveySuperMapScene.ts) to avoid circular-dependency error caused by importing CoveySubMapScene 
+ (which extends CoveySuperMapScene) into the same file where its super-class is defined. Both map 
+ scene classes are imported above. 
+*/
+
+/*
+ This function allows for the dynamic creation of the user's current map location. The function takes
+ a video instance, emitMovement and emitMapChange functions, and the currentMapID as parameters and 
+ passes them to the appropriate map scene constructor. The function returns the created map scene. 
+*/
 function createMapScene(video: Video, emitMovement: (location: UserLocation) => void, 
                         emitMapChange: (map: CoveyTownMapID) => void, currentMapID: CoveyTownMapID) {
 
@@ -17,6 +29,7 @@ function createMapScene(video: Video, emitMovement: (location: UserLocation) => 
 
 export default function WorldMap(): JSX.Element {
   const video = Video.instance();
+  // emitMapChange and currentMapID are now extracted from the App state
   const {
     emitMovement, players, emitMapChange, currentMapID
   } = useCoveyAppState();
@@ -39,6 +52,8 @@ export default function WorldMap(): JSX.Element {
 
     const game = new Phaser.Game(config);
     if (video) {
+      // newGameScene variable now collects the appropriate game scene from the createMapScene 
+      // function defined above
       const newGameScene = createMapScene(video, emitMovement, emitMapChange, currentMapID);
       setGameScene(newGameScene);
       game.scene.add('coveyBoard', newGameScene, true);
@@ -52,11 +67,14 @@ export default function WorldMap(): JSX.Element {
     return () => {
       game.destroy(true);
     };
-  }, [video, emitMovement, emitMapChange, currentMapID]);
+    // emitMapChange and currentMapID added to dependency list
+  }, [video, emitMovement, emitMapChange, currentMapID]); 
 
   const deepPlayers = JSON.stringify(players);
   useEffect(() => {
     gameScene?.updatePlayersLocations(players);
+    // currentMapID added to dependency list so that updatePlayersLocations is called when the user
+    // changes maps
   }, [players, deepPlayers, gameScene, currentMapID]);
 
   return <div id="map-container"/>;

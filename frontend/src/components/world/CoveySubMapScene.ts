@@ -10,8 +10,8 @@ import Video from "../../classes/Video/Video";
 
 export default class CoveySubMapScene extends CoveySuperMapScene {
 
-  constructor(video: Video, emitMovement: (loc:UserLocation) => void, emitMapChange: (map: CoveyTownMapID) => void, mapID: string) {
-    super(video, emitMovement, emitMapChange, mapID);
+  constructor(video: Video, emitMovement: (loc:UserLocation) => void, emitMapChange: (map: CoveyTownMapID) => void, mapID: string, myPlayerID: string) {
+    super(video, emitMovement, emitMapChange, mapID, myPlayerID);
     this.tilemap = 'pokemon_big'
   }
 

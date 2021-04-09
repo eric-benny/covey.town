@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="314">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="317">
  <editorsettings>
   <export target="tuxemon-town.json" format="json"/>
  </editorsettings>
@@ -3517,6 +3517,12 @@
    <point/>
   </object>
   <object id="313" name="DoorBottomRight" x="319" y="1118">
+   <point/>
+  </object>
+  <object id="314" name="SubSpawn" x="622.33" y="923.17">
+   <point/>
+  </object>
+  <object id="315" name="SubReturn" x="622" y="912.83">
    <point/>
   </object>
  </objectgroup>

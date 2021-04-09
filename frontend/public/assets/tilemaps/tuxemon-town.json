@@ -98,6 +98,30 @@
                  "width":0,
                  "x":319,
                  "y":1118
+                }, 
+                {
+                 "height":0,
+                 "id":314,
+                 "name":"SubSpawn",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":622.33,
+                 "y":923.17
+                }, 
+                {
+                 "height":0,
+                 "id":315,
+                 "name":"SubReturn",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":622,
+                 "y":912.83
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -106,7 +130,7 @@
          "y":0
         }],
  "nextlayerid":5,
- "nextobjectid":314,
+ "nextobjectid":317,
  "orientation":"orthogonal",
  "properties":[
         {

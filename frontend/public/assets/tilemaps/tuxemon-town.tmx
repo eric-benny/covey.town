@@ -3519,10 +3519,10 @@
   <object id="313" name="DoorBottomRight" x="319" y="1118">
    <point/>
   </object>
-  <object id="314" name="OtherSpawn" x="622.33" y="923.17">
+  <object id="314" name="TransferSpawn" x="622.33" y="923.17">
    <point/>
   </object>
-  <object id="315" name="OtherReturn" x="622" y="912.83">
+  <object id="315" name="TransferReturn" x="622" y="912.83">
    <point/>
   </object>
  </objectgroup>

@@ -102,7 +102,7 @@
                 {
                  "height":0,
                  "id":314,
-                 "name":"OtherSpawn",
+                 "name":"TransferSpawn",
                  "point":true,
                  "rotation":0,
                  "type":"",
@@ -114,7 +114,7 @@
                 {
                  "height":0,
                  "id":315,
-                 "name":"OtherReturn",
+                 "name":"TransferReturn",
                  "point":true,
                  "rotation":0,
                  "type":"",

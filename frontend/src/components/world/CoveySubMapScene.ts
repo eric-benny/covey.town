@@ -23,7 +23,9 @@ export default class CoveySubMapScene extends CoveySuperMapScene {
   }
 
   // Emmitted value updated to transfer player to the super-map
-  transferPlayer(): void {
-    this.emitMapChange("0")
+  // MD added transfer x, y paramters to emit player movement to destination spawn point
+  transferPlayer(transfer_x: number, transfer_y: number): void {
+    this.emitMapChange('0')
+    this.emitMovement({x: transfer_x, y: transfer_y, rotation: 'front', moving: false })
   }
 }

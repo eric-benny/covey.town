@@ -15,7 +15,15 @@ Page requirement: max 4 pages.
         -make our code/application extensible
 3.quick explanation how we broke up our DESIGN.md doc
 -->
+### Intro and motivation of our design 
+In our initial planning phase, we brainstormed different features to create create for Covey.Town and felt that submaps would be a great feature to implement.  We tried our best to follow certain themes in our approach:
 
+1. make use of the current functionality to our advantage
+2. make our code/feature extensible such that it could have a lifecycle that could be continued after this project ends and more features can be created upon ours.
+
+Given our constraints such as a short timeline, coming into a codebase that we haven’t seen before, and learning the regular curriculum, we felt our submaps feature aligned with our approach and requirements for the project.
+
+ 
 # Front-end
 <!--Front-end Outline (refer to Eric's doc inside our team folder 
 CS5500 Group 41 > Deliverables > Design Notes.docx
@@ -38,6 +46,7 @@ CS5500 Group 41 > Deliverables > Design Notes.docx
 ### WorldMap.tsx
 ![worldFolder_4.8.21.png](docs/worldFolder_4.8.21.png)
 ### CoveySuperMapScene.ts
+
 ### CoveySubMapScene.ts
 
 # State Changes

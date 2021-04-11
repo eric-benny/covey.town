@@ -53,8 +53,7 @@ CS5500 Group 41 > Deliverables > Design Notes.docx
         - WorldMap
         - CoveySuperMapScene 
         - CoveySubMapScene
-## Reducer
-New and changed reducer functions
+## Reducer Actions
 1. New
     - playerMapChanged: triggered when a ‘playerMapChanged’ action is received by the socket
         - Updates the map of the player who migrated and recalculates nearby players

@@ -15,7 +15,7 @@ Page requirement: max 4 pages.
         -make our code/application extensible
 3.quick explanation how we broke up our DESIGN.md doc
 -->
-### Intro and motivation of our design 
+### Planning and Approach
 In our initial planning phase, we brainstormed different features to create create for Covey.Town and felt that submaps would be a great feature to implement.  We tried our best to follow certain themes in our approach:
 
 1. make use of the current functionality to our advantage
@@ -23,7 +23,17 @@ In our initial planning phase, we brainstormed different features to create crea
 
 Given our constraints such as a short timeline, coming into a codebase that we haven’t seen before, and learning the regular curriculum, we felt our submaps feature aligned with our approach and requirements for the project.
 
- 
+We explored the WorldMap class (WorldMap.tsx) and the CoveyGameScene class (inside the WorldMap.tsx) and spent a considerable amount of time reviewing/discussing the flow of the current application.  We realized that there was current functionality we could tap into and felt we would want to make the following changes:
+1. WorldMap.tsx → move CoveySuperMapScene class (formally CoveyGameScene) our of this file and  into it’s own file.
+2. Create a new class and separate file, CoveySubMapScene, that would extends CoveySuperMapScene
+
+#### This resulted in the following changes and purposes:
+1. WorldMap.tsx : WorldMap will be the class that contains functionality for our SuperMap and for our SubMap(s).  The function, createMapScene, which is responsible in creating the map in either the the Super or Submap is declared here.  If the currentMapID is a 0, then it refers to the SuperMap, if it is a, 1, then this will refer to the Submap.  We will continue to use this 0 and 1 methodology to help the avatar shift easily between Super and Sub maps.
+2. CoveySuperMapScene.ts: This class was formally known as CoveyGameScene and changed to CoveySuperMapScene and moved to a separate file.  Our approach in looking at this file was, to refactor where needed, but to extend functionality from this map to the Submap.  We needed our two separate maps to be able to have the same properties so they could speak the same language to each other.
+3. CoveySubMapScene.ts:  Within the CoveySubMapScene, we take care of all our subMap functionality.  Previously, we thought we may need many functions here, but realized, this would create a lot of code duplication.  The CoveySubMapScene extends CoveySuperMapScene, so we realized that the superMap can deal with a lot of the logic.  The main difference is the subMap class will just preload the actual subMap file, while the superMap will deal with any heavy lifting.
+
+
+
 # Front-end
 <!--Front-end Outline (refer to Eric's doc inside our team folder 
 CS5500 Group 41 > Deliverables > Design Notes.docx

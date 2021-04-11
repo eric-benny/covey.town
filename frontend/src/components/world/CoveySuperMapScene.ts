@@ -1,30 +1,36 @@
 import Phaser from 'phaser';
 import Player, { CoveyTownMapID, Direction, UserLocation } from '../../classes/Player';
 import Video from '../../classes/Video/Video';
-// import useCoveyAppState from '../../hooks/useCoveyAppState';
+
+/*
+ This class has been refactored to CoveySuperMapScene from CoveyGameScene. This class represents
+ the main Covey.Town overworld, from which players can enter submaps (buildings). 
+*/
 
 export default class CoveySuperMapScene extends Phaser.Scene {
-  // added field here, so subMap can initialize this property to the tile map specific to the subMap
+
+  // Property added to allow maps to initialize this value on construction, and prevent the need
+  // to hard-code it below
   protected tilemap: string;
 
-  // added to use for filtering of other players by map
+  // Property added to allow the value to be accessible to all class methods
   private currentMapID: string;
 
   private player?: {
     sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody, label: Phaser.GameObjects.Text
   };
 
-  private id?: string;
+  private myPlayerID: string;
 
   private players: Player[] = [];
 
   private cursors: Phaser.Types.Input.Keyboard.CursorKeys[] = [];
 
-    /*
-     * A "captured" key doesn't send events to the browser - they are trapped by Phaser
-     * When pausing the game, we uncapture all keys, and when resuming, we re-capture them.
-     * This is the list of keys that are currently captured by Phaser.
-     */
+  /*
+  * A "captured" key doesn't send events to the browser - they are trapped by Phaser
+  * When pausing the game, we uncapture all keys, and when resuming, we re-capture them.
+  * This is the list of keys that are currently captured by Phaser.
+  */
   private previouslyCapturedKeys: number[] = [];
 
   private lastLocation?: UserLocation;
@@ -35,19 +41,20 @@ export default class CoveySuperMapScene extends Phaser.Scene {
 
   private video: Video;
 
-  private emitMovement: (loc: UserLocation) => void;
+  protected emitMovement: (loc: UserLocation) => void;
 
   protected emitMapChange: (map: CoveyTownMapID) => void; // MD set to protected
 
-  // JP: Moved map to a field to allow map's properties to be referenced from update()
+  // Property added to allow Phaser map object to be accessible from the update function, defined below
   private map?: Phaser.Tilemaps.Tilemap;
 
-  constructor(video: Video, emitMovement: (loc: UserLocation) => void, emitMapChange: (map: CoveyTownMapID) => void, mapID: string) {
+  constructor(video: Video, emitMovement: (loc: UserLocation) => void, emitMapChange: (map: CoveyTownMapID) => void, mapID: string, myPlayerID: string) {
     super('PlayGame');
     this.video = video;
     this.emitMovement = emitMovement;
     this.emitMapChange = emitMapChange;
     this.currentMapID = mapID;
+    this.myPlayerID = myPlayerID;
     this.tilemap = 'tuxmon-sample-32px-extruded'
   }
 
@@ -58,24 +65,15 @@ export default class CoveySuperMapScene extends Phaser.Scene {
     this.load.atlas('atlas', '/assets/atlas/atlas.png', '/assets/atlas/atlas.json');
   }
 
-
-  // getCurrentMapID() {
-  //   const myPlayer = this.players.find((player) => player.id === this.playerID)
-  //   return myPlayer?.mapID
-  // }
-
-  // MD added transfer player function to handle trigger tile event
-  transferPlayer(): void {
-    // console.log("emitting map change to 1!")
+  // Function added to emit the map change value; can be overridded in extending classes to pass
+  // different values based on the destination map
+  // MD added transfer x, y parameters to emit player movement to destination spawn point
+  transferPlayer(transfer_x: number, transfer_y: number): void {
+    this.emitMovement({x: transfer_x, y: transfer_y, rotation: 'front', moving: false })
     this.emitMapChange('1')
-    // const updatedMap = this.getCurrentMapID()
-    // console.log("current map: ", updatedMap)
-    // emit movement to new map spawn point
-    // emit 
   }
 
   updatePlayersLocations(players: Player[]): void {
-    // console.log('updating player locations')
     if (!this.ready) {
       this.players = players;
       return;
@@ -118,11 +116,11 @@ export default class CoveySuperMapScene extends Phaser.Scene {
         if (!mapID) {
           mapID = '0';
         }
-        // MD added mapID to Player call
+        // mapID has been added to the Player constructor
         myPlayer = new Player(player.id, player.userName, location, mapID);
         this.players.push(myPlayer);
       }
-      if (this.id !== myPlayer.id && this.physics && player.location) {
+      if (this.myPlayerID !== myPlayer.id && this.physics && player.location) {
         // set the player location and mapID
         // this brings this.players in line with state players, ensuring correct mapID
         myPlayer.location = player.location
@@ -148,7 +146,7 @@ export default class CoveySuperMapScene extends Phaser.Scene {
           myPlayer.label = label;
           myPlayer.sprite = sprite;
         }
-        // Update the visibility of other players so that the player only sees other players on the same map
+        // Update the visibility of other players so that only players on the current map are visible
         if (myPlayer.sprite) {
           if (myPlayer.mapID === this.currentMapID) {
             myPlayer.sprite.setVisible(true)
@@ -221,7 +219,7 @@ export default class CoveySuperMapScene extends Phaser.Scene {
           default:
             // Not moving
             this.player.sprite.anims.stop();
-            // If we were moving, pick and idle frame to use
+            // If we were moving, pick an idle frame to use
             if (prevVelocity.x < 0) {
               this.player.sprite.setTexture('atlas', 'misa-left');
             } else if (prevVelocity.x > 0) {
@@ -259,23 +257,29 @@ export default class CoveySuperMapScene extends Phaser.Scene {
           this.emitMovement(this.lastLocation);
         }
 
-
-        // JP: Establishes the top-left of the doorway on the town map
+        // Establishes the top-left position of the doorway on the town map
         const tl = this.map?.findObject('Objects',
         (obj) => obj.name === 'DoorTopLeft') as unknown as
         Phaser.GameObjects.Components.Transform;
 
-        // JP: Establishes the bottom-right of the doorway on the town map
+        // Establishes the bottom-right position of the doorway on the town map
         const br = this.map?.findObject('Objects',
         (obj) => obj.name === 'DoorBottomRight') as unknown as
         Phaser.GameObjects.Components.Transform;
 
-        // JP: Checks if user's body is in the doorway
+        // Get spawn point for destination map
+        const transferSpawn = this.map?.findObject('Objects',
+        (obj) => obj.name === 'TransferSpawn') as unknown as
+        Phaser.GameObjects.Components.Transform;
+
+        // Checks if user's body is in the doorway, and if so, transfers player to alternate map
         if (body.x > tl.x
           && body.x < br.x
           && body.y > tl.y
           && body.y < br.y) {
-            this.transferPlayer() // MD added function call to handle trigger tile event
+            // MD set sprite to invisible during transfer, pass destination spawn point x,y to transfer function
+            this.player.sprite.setVisible(false)
+            this.transferPlayer(transferSpawn.x, transferSpawn.y)
           }
       }
     }
@@ -317,9 +321,9 @@ export default class CoveySuperMapScene extends Phaser.Scene {
       // but for debugging, you can comment out that line.
       transporters.forEach(transporter => {
           const sprite = transporter as Phaser.GameObjects.Sprite;
-          sprite.y += 2 * sprite.height; // Phaser and Tiled seem to disagree on which corner is y
-          sprite.setVisible(false); // Comment this out to see the transporter rectangles drawn on
-                                    // the map
+          // Phaser and Tiled seem to disagree on which corner is y
+          sprite.y += 2 * sprite.height;
+          sprite.setVisible(false);
         }
       );
 
@@ -332,7 +336,6 @@ export default class CoveySuperMapScene extends Phaser.Scene {
           })
         }
       });
-
 
 
       const cursorKeys = this.input.keyboard.createCursorKeys();
@@ -349,8 +352,6 @@ export default class CoveySuperMapScene extends Phaser.Scene {
         'left': Phaser.Input.Keyboard.KeyCodes.K,
         'right': Phaser.Input.Keyboard.KeyCodes.L
       }, false) as Phaser.Types.Input.Keyboard.CursorKeys);
-
-
 
 
       // Create a sprite with physics enabled via the physics system. The image used for the sprite
@@ -493,8 +494,6 @@ export default class CoveySuperMapScene extends Phaser.Scene {
 
       this.ready = true;
       if (this.players.length) {
-        // Some players got added to the queue before we were ready, make sure that they have
-        // sprites....
         this.players.forEach((p) => this.updatePlayerLocation(p));
       }
     }
@@ -507,7 +506,6 @@ export default class CoveySuperMapScene extends Phaser.Scene {
 
     resume(): void {
       this.paused = false;
-      // this.input.keyboard.addCapture(this.previouslyCapturedKeys);
       if(Video.instance()){
         // If the game is also in process of being torn down, the keyboard could be undefined
         this.input.keyboard.addCapture(this.previouslyCapturedKeys);

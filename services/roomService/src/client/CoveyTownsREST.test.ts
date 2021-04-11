@@ -166,8 +166,6 @@ describe('TownsServiceAPIREST', () => {
         fail('updateTown with an invalid password should throw an error');
       } catch (err) {
         // err expected
-        // TODO this should really check to make sure it's the *right* error, but we didn't specify
-        // the format of the exception :(
       }
 
       // Make sure name or vis didn't change
@@ -210,8 +208,6 @@ describe('TownsServiceAPIREST', () => {
         fail('Expected an error to be thrown by joinTown but none thrown');
       } catch (err) {
         // OK, expected an error
-        // TODO this should really check to make sure it's the *right* error, but we didn't specify
-        // the format of the exception :(
       }
     });
     it('Admits a user to a valid public or private town', async () => {

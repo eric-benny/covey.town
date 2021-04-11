@@ -32,69 +32,62 @@ We explored the WorldMap class (WorldMap.tsx) and the CoveyGameScene class (insi
 2. CoveySuperMapScene.ts: This class was formally known as CoveyGameScene and changed to CoveySuperMapScene and moved to a separate file.  Our approach in looking at this file was, to refactor where needed, but to extend functionality from this map to the Submap.  We needed our two separate maps to be able to have the same properties so they could speak the same language to each other.
 3. CoveySubMapScene.ts:  Within the CoveySubMapScene, we take care of all our subMap functionality.  Previously, we thought we may need many functions here, but realized, this would create a lot of code duplication.  The CoveySubMapScene extends CoveySuperMapScene, so we realized that the superMap can deal with a lot of the logic.  The main difference is the subMap class will just preload the actual subMap file, while the superMap will deal with any heavy lifting.
 
+We will go through the rest of the design by breaking this into sections of: Front-end: App.tsx, Front-end: WorldMap.tsx, CoveySuperMapScene.ts, CoveySubMapScene.ts, Reflections and Next-steps
 
-
-# Front-end
+# Front-end: App.tsx
 <!--Front-end Outline (refer to Eric's doc inside our team folder 
 CS5500 Group 41 > Deliverables > Design Notes.docx
 1.App.tsx
 1.1 State
 1.2 Reducer
--->
-## App.tsx
+-->a
+## State
+## Reducer
+
 ![src_app.uml](docs/src_App_4.8.21.png)
 
-# Front-end: Super/Sub-map scene and WorldMap
-<!-- Game Scene Outline
-1. What we first saw when looking at WorldMap
-2. How we imagined extensible design and created: CoveySuperMapScene and CoveySubMapScene
-3. About WorldMap.tsx
-4. About CoveySuperMapScene
-5. About CoveySubMapScene
-6. How we handled the scene changing between Super->Sub and Sub->Super
--->
-### WorldMap.tsx
+# Front-end: WorldMap.tsx, CoveySuperMapScene.ts, CoveySubMapScene.ts
+
+## WorldMap.tsx
 ![worldFolder_4.8.21.png](docs/worldFolder_4.8.21.png)
-### CoveySuperMapScene.ts
+1. About WorldMap.tsx
+    1. What we first saw when looking at WorldMap
+2. How we imagined extensible design and created: CoveySuperMapScene and CoveySubMapScene
+## CoveySuperMapScene.ts
+1. About CoveySuperMapScene
+2. Changing between scenes of Super--> Sub and Sub-->Super
+## CoveySubMapScene.ts
+1. About CoveySubMapScene
 
-### CoveySubMapScene.ts
-
-# State Changes
+# State Changes (TBD)
 <!--State Changes Outline
 1. Not sure if this is to be on it's own, OR will be discussed in the 
 frontend:super/sub section.  Placed it here, since we discussed this section on Thurs.
 Feel free to modify.
 -->
 
-# (Need a better title: Code updates from Professor)
-<!--Need a better title: Code updates from Professor Outline
-1.We need to somehow explain why we did not take certain code from 
-Professor Bell's updated code, OR had to modify it.
-2.We did not use transporter code.
-    - we made changes to our code by the time we saw the transporter code update and had
-    to comment the update to make sure it did not interact with our current feature
-    we were building.
+# Reflections, Next-steps & Conclusion
+## Production code we did not use:
+1. List code we didn't include from production code base
+2. We did not use transporter code. 
+    - we made changes to our code by the time we saw the transporter code update and had 
+     to comment the update to make sure it did not interact with our current feature 
+     we were building.
     - List any other reasoning
-3.Sprite fix (in upper left) update
-    - updated code from Professor used the same naming convention for a field we 
-    already had in use.
+3. Sprite fix (in upper left) update
+    - updated code from Professor used the same naming convention for a field we
+      already had in use.
     - So we can explain what we did.
--->
 
-# For our Covey.Town v2 release: 
-<!-- For our v2 Release Outline:
-1. There were things that we had to intentionally leave for later
+
+## Next-steps & Conclusion:
+1. There were things that we had to intentionally leave for later that we could place into a Covey.Town v2 release
 2. How did we handle issues outside of our use-cases?
-    -We had a list in our meeting minutes and would have to 
-    prioritize if those issues were optional vs. required.
-    -Tried our best to prioritize the use cases as outlined in our plan
+   -We had a list in our meeting minutes and would have to
+   prioritize if those issues were optional vs. required.
+   -Tried our best to prioritize the use cases as outlined in our plan
 3. What would we do for the v2 release:
-    -incorporate the transporter code.
-    -spawn relocation for avatar from Submap->SuperMap, so it goes to entrance
-    -(anything else)  
--->
-
-# Conclusion
-<!--Conclusion Outline
-1.Outro
--->
+   -incorporate the transporter code.
+   -spawn relocation for avatar from Submap->SuperMap, so it goes to entrance
+   -(anything else)
+4. Close-out section

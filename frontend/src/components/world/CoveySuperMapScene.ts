@@ -41,7 +41,7 @@ export default class CoveySuperMapScene extends Phaser.Scene {
 
   private video: Video;
 
-  private emitMovement: (loc: UserLocation) => void;
+  protected emitMovement: (loc: UserLocation) => void;
 
   protected emitMapChange: (map: CoveyTownMapID) => void; // MD set to protected
 
@@ -66,7 +66,9 @@ export default class CoveySuperMapScene extends Phaser.Scene {
 
   // Function added to emit the map change value; can be overridded in extending classes to pass
   // different values based on the destination map
-  transferPlayer(): void {
+  // MD added transfer x, y parameters to emit player movement to destination spawn point
+  transferPlayer(transfer_x: number, transfer_y: number): void {
+    this.emitMovement({x: transfer_x, y: transfer_y, rotation: 'front', moving: false })
     this.emitMapChange('1')
   }
 
@@ -264,12 +266,19 @@ export default class CoveySuperMapScene extends Phaser.Scene {
         (obj) => obj.name === 'DoorBottomRight') as unknown as
         Phaser.GameObjects.Components.Transform;
 
+        // Get spawn point for destination map
+        const transferSpawn = this.map?.findObject('Objects',
+        (obj) => obj.name === 'TransferSpawn') as unknown as
+        Phaser.GameObjects.Components.Transform;
+
         // Checks if user's body is in the doorway, and if so, transfers player to alternate map
         if (body.x > tl.x
           && body.x < br.x
           && body.y > tl.y
           && body.y < br.y) {
-            this.transferPlayer()
+            // MD set sprite to invisible during transfer, pass destination spawn point x,y to transfer function
+            this.player.sprite.setVisible(false)
+            this.transferPlayer(transferSpawn.x, transferSpawn.y)
           }
       }
     }

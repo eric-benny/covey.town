@@ -19,19 +19,20 @@ import CoveySubMapScene from './CoveySubMapScene';
  passes them to the appropriate map scene constructor. The function returns the created map scene. 
 */
 function createMapScene(video: Video, emitMovement: (location: UserLocation) => void, 
-                        emitMapChange: (map: CoveyTownMapID) => void, currentMapID: CoveyTownMapID) {
+                        emitMapChange: (map: CoveyTownMapID) => void, currentMapID: CoveyTownMapID,
+                        myPlayerID: string) {
 
   if (currentMapID === '1') {
-    return new CoveySubMapScene(video, emitMovement, emitMapChange, currentMapID)
+    return new CoveySubMapScene(video, emitMovement, emitMapChange, currentMapID, myPlayerID)
   }
-  return new CoveySuperMapScene(video, emitMovement, emitMapChange, currentMapID)
+  return new CoveySuperMapScene(video, emitMovement, emitMapChange, currentMapID, myPlayerID)
 }
 
 export default function WorldMap(): JSX.Element {
   const video = Video.instance();
   // emitMapChange and currentMapID are now extracted from the App state
   const {
-    emitMovement, players, emitMapChange, currentMapID
+    emitMovement, players, emitMapChange, currentMapID, myPlayerID
   } = useCoveyAppState();
 
   const [gameScene, setGameScene] = useState<CoveySuperMapScene>();
@@ -54,7 +55,7 @@ export default function WorldMap(): JSX.Element {
     if (video) {
       // newGameScene variable now collects the appropriate game scene from the createMapScene 
       // function defined above
-      const newGameScene = createMapScene(video, emitMovement, emitMapChange, currentMapID);
+      const newGameScene = createMapScene(video, emitMovement, emitMapChange, currentMapID, myPlayerID);
       setGameScene(newGameScene);
       game.scene.add('coveyBoard', newGameScene, true);
       video.pauseGame = () => {
@@ -68,7 +69,7 @@ export default function WorldMap(): JSX.Element {
       game.destroy(true);
     };
     // emitMapChange and currentMapID added to dependency list
-  }, [video, emitMovement, emitMapChange, currentMapID]); 
+  }, [video, emitMovement, emitMapChange, currentMapID, myPlayerID]); 
 
   const deepPlayers = JSON.stringify(players);
   useEffect(() => {

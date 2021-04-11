@@ -20,7 +20,7 @@ export default class CoveySuperMapScene extends Phaser.Scene {
     sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody, label: Phaser.GameObjects.Text
   };
 
-  private id?: string;
+  private myPlayerID: string;
 
   private players: Player[] = [];
 
@@ -48,12 +48,13 @@ export default class CoveySuperMapScene extends Phaser.Scene {
   // Property added to allow Phaser map object to be accessible from the update function, defined below
   private map?: Phaser.Tilemaps.Tilemap;
 
-  constructor(video: Video, emitMovement: (loc: UserLocation) => void, emitMapChange: (map: CoveyTownMapID) => void, mapID: string) {
+  constructor(video: Video, emitMovement: (loc: UserLocation) => void, emitMapChange: (map: CoveyTownMapID) => void, mapID: string, myPlayerID: string) {
     super('PlayGame');
     this.video = video;
     this.emitMovement = emitMovement;
     this.emitMapChange = emitMapChange;
     this.currentMapID = mapID;
+    this.myPlayerID = myPlayerID;
     this.tilemap = 'tuxmon-sample-32px-extruded'
   }
 
@@ -119,7 +120,7 @@ export default class CoveySuperMapScene extends Phaser.Scene {
         myPlayer = new Player(player.id, player.userName, location, mapID);
         this.players.push(myPlayer);
       }
-      if (this.id !== myPlayer.id && this.physics && player.location) {
+      if (this.myPlayerID !== myPlayer.id && this.physics && player.location) {
         // set the player location and mapID
         // this brings this.players in line with state players, ensuring correct mapID
         myPlayer.location = player.location

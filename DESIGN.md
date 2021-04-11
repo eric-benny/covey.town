@@ -48,7 +48,7 @@ CS5500 Group 41 > Deliverables > Design Notes.docx
         - WorldMap
         - CoveySuperMapScene 
         - CoveySubMapScene
-2. emitMapChange: function which triggers the socket to emit a ‘playerMigratied’ event
+2. emitMapChange: function which triggers the socket to emit a ‘playerMigrated’ event
     - Collaborator classes/functions
         - WorldMap
         - CoveySuperMapScene 

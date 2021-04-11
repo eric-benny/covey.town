@@ -42,7 +42,27 @@ CS5500 Group 41 > Deliverables > Design Notes.docx
 1.2 Reducer
 -->
 ## State
+#### New Attributes Added
+1. currentMapID: maintains the player’s current map. Used to determine which scene to render and which players to make visible 
+    - Collaborator classes/functions
+        - WorldMap
+        - CoveySuperMapScene 
+        - CoveySubMapScene
+2. emitMapChange: function which triggers the socket to emit a ‘playerMigratied’ event
+    - Collaborator classes/functions
+        - WorldMap
+        - CoveySuperMapScene 
+        - CoveySubMapScene
 ## Reducer
+New and changed reducer functions
+1. New
+    - playerMapChanged: triggered when a ‘playerMapChanged’ action is received by the socket
+        - Updates the map of the player who migrated and recalculates nearby players
+    - weMapChanged: triggered when the current player migrates (emitMapChanged)
+        - Updates the currentMapID in the state and recalculates nearby players
+2. Updated
+    - playerMoved: also update the mapID of the player
+        - This change was made because often a player moving and changing maps happens simultaneously. In this case, because actions are not synchronous, the players array returned by playerMoved may overwrite the players array returned by playerMapChanged. Updating mapID in both actions ensures we always get the correct mapID from the backend
 
 ![src_app.uml](docs/src_App_4.8.21.png)
 

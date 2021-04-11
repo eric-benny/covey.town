@@ -40,7 +40,7 @@ CS5500 Group 41 > Deliverables > Design Notes.docx
 1.App.tsx
 1.1 State
 1.2 Reducer
--->a
+-->
 ## State
 ## Reducer
 
@@ -60,11 +60,7 @@ CS5500 Group 41 > Deliverables > Design Notes.docx
 1. About CoveySubMapScene
 
 # State Changes (TBD)
-<!--State Changes Outline
-1. Not sure if this is to be on it's own, OR will be discussed in the 
-frontend:super/sub section.  Placed it here, since we discussed this section on Thurs.
-Feel free to modify.
--->
+1. Not sure if this is to be on it's own, OR will be discussed in the frontend:super/sub section.  Placed it here, since we discussed this section on Thurs. Feel free to modify.
 
 # Reflections, Next-steps & Conclusion
 ## Production code we did not use:

@@ -63,40 +63,38 @@ CS5500 Group 41 > Deliverables > Design Notes.docx
     - playerMoved: also update the mapID of the player
         - This change was made because often a player moving and changing maps happens simultaneously. In this case, because actions are not synchronous, the players array returned by playerMoved may overwrite the players array returned by playerMapChanged. Updating mapID in both actions ensures we always get the correct mapID from the backend
 
-![src_app.uml](docs/src_App_4.8.21.png)
+![src_app.uml](docs/src_App_4.12.21.png)
 
 # Front-end: WorldMap.tsx, CoveySuperMapScene.ts, CoveySubMapScene.ts
 
 ## WorldMap.tsx
-![worldFolder_4.8.21.png](docs/worldFolder_4.8.21.png)
-1. About WorldMap.tsx
+![worldFolder_4.8.21.png](docs/worldFolder_4.12.21.png)
+1. [todo] About the WorldMap.tsx
     1. What we first saw when looking at WorldMap
-2. How we imagined extensible design and created: CoveySuperMapScene and CoveySubMapScene
+2. [todo]List info How we imagined extensible design and created: CoveySuperMapScene and CoveySubMapScene
 ## CoveySuperMapScene.ts
-1. About CoveySuperMapScene
+1. [todo] About the CoveySuperMapScene
 2. Changing between scenes of Super--> Sub and Sub-->Super
 ## CoveySubMapScene.ts
-1. About CoveySubMapScene
-
-# State Changes (TBD)
-1. Not sure if this is to be on it's own, OR will be discussed in the frontend:super/sub section.  Placed it here, since we discussed this section on Thurs. Feel free to modify.
+1. [todo] About the CoveySubMapScene
 
 # Reflections, Next-steps & Conclusion
 ## Reflections and Rationale post feature update
-### During the length of the project, We did not use transporter code from the Professor's Covey.Town repo. 
+During the length of the project, items naturally arose in which we had to discuss as a group if they were to be 
+addressed now vs. later.  We tried our best to stick to the project plan we created at the beginning of the project,
+while weighing in on the "now vs. later" items.  Some of these items were outside the scope of our use cases and what
+we set out to do.  While some may be more UI based and felt it could be addressed in perhaps a Covey.Town v2 release.
+We felt it important to list what we left for later and some rationale behind that:
+1. We did not use transporter code from the Professor's Covey.Town repo. 
     - we made changes to our code by the time we saw the transporter code update and had 
      to comment the update to make sure it did not interact with our current feature 
      we were building.
-2. 
-
+2. Spawn relocation from SubMap-> SuperMap.
+   - When the avatar goes from the SubMap to the SuperMap, it will spawn back at the SuperMap spawnpoint. 
 
 ## Next-steps & Conclusion:
-1. There were things that we had to intentionally leave for later that we could place into a Covey.Town v2 release
-2. How did we handle issues outside of our use-cases?
+1. How did we handle issues outside of our use-cases?
    -We had a list in our meeting minutes and would have to
    prioritize if those issues were optional vs. required.
    -Tried our best to prioritize the use cases as outlined in our plan
-3. What would we do for the v2 release:
-   -spawn relocation for avatar from Submap->SuperMap, so it goes to entrance
-   -(anything else)
 4. Close-out section

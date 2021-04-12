@@ -82,17 +82,12 @@ CS5500 Group 41 > Deliverables > Design Notes.docx
 1. Not sure if this is to be on it's own, OR will be discussed in the frontend:super/sub section.  Placed it here, since we discussed this section on Thurs. Feel free to modify.
 
 # Reflections, Next-steps & Conclusion
-## Production code we did not use:
-1. List code we didn't include from production code base
-2. We did not use transporter code. 
+## Reflections and Rationale post feature update
+### During the length of the project, We did not use transporter code from the Professor's Covey.Town repo. 
     - we made changes to our code by the time we saw the transporter code update and had 
      to comment the update to make sure it did not interact with our current feature 
      we were building.
-    - List any other reasoning
-3. Sprite fix (in upper left) update
-    - updated code from Professor used the same naming convention for a field we
-      already had in use.
-    - So we can explain what we did.
+2. 
 
 
 ## Next-steps & Conclusion:
@@ -102,7 +97,6 @@ CS5500 Group 41 > Deliverables > Design Notes.docx
    prioritize if those issues were optional vs. required.
    -Tried our best to prioritize the use cases as outlined in our plan
 3. What would we do for the v2 release:
-   -incorporate the transporter code.
    -spawn relocation for avatar from Submap->SuperMap, so it goes to entrance
    -(anything else)
 4. Close-out section

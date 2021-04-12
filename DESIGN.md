@@ -86,15 +86,19 @@ while weighing in on the "now vs. later" items.  Some of these items were outsid
 we set out to do.  While some may be more UI based and felt it could be addressed in perhaps a Covey.Town v2 release.
 We felt it important to list what we left for later and some rationale behind that:
 1. We did not use transporter code from the Professor's Covey.Town repo. 
-    - we made changes to our code by the time we saw the transporter code update and had 
-     to comment the update to make sure it did not interact with our current feature 
-     we were building.
+    - By the time the transporter code came out, we already created new code based on Covey.Town looked prior to the transporter code.
+      Since we already started creating, planning, and building before it was released, we felt commenting it out was for the best. 
+    - Our feature update and use-cases relate to avatar movement, so we did not want any cross-feature update to interfere with our work.
+      So we commented it out, however, this can be included later on if desired.  
 2. Spawn relocation from SubMap-> SuperMap.
-   - When the avatar goes from the SubMap to the SuperMap, it will spawn back at the SuperMap spawnpoint. 
+   - When the avatar goes from the SubMap to the SuperMap, it will spawn back at the SuperMap spawnpoint instead of spawning by the doorway of the building you entered in the SuperMap. 
+     This is an item that is more UI and something and while we wanted to work on this, we felt that we should spend our time focused on the use-cases and if we have time to work on later.
+   - In the next release, if you include the transporter code, then the spawn relocation becomes less of an issue as you can utilize the transporter functionality to traverse the map.
+
+
 
 ## Next-steps & Conclusion:
-1. How did we handle issues outside of our use-cases?
-   -We had a list in our meeting minutes and would have to
-   prioritize if those issues were optional vs. required.
-   -Tried our best to prioritize the use cases as outlined in our plan
-4. Close-out section
+1. Having good discussion early on in the project allowed all of us to explore different design options and incorporate
+everyone's thoughts into the project design.  Creating a project schedule, taking meeting minutes, and having regular meetings,
+made things easier for us to react as a team in our creation and implementation of our design.
+2. [todo] list anything else

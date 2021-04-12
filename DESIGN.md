@@ -78,6 +78,27 @@ CS5500 Group 41 > Deliverables > Design Notes.docx
 ## CoveySubMapScene.ts
 1. [todo] About the CoveySubMapScene
 
+# Back-end: roomService
+Changes for the backend roomService handle the players moving between maps. 
+Ensuring that all player map locations are tracked and events are broadcast to other players.
+## Player.ts
+1. Add mapID to hold the value of the player's current map id
+
+## CoveyTownRequestHandlers.ts
+1. Add a socket emission for 'playerMigration' event in the townSubscriptionHandler
+2. Include 'playerMapChanged' handler in townSocketAdapter
+
+## CoveyTownListener.ts
+1. Add new listener function, onPlayerMapChanged
+
+## CoveyTownController.ts
+1. Add function updatePlayerMap which updates a player's map id and broadcasts the change to all listeners
+
+## Testing
+1. CoveyTownsStore.test.ts: add onPlayerMapChanged to the listener
+2. CoveyTownController.test.ts: add tests to confirm notification of listeners to player migrations between maps
+3. CoveyTownSocket.test.ts: test that the socket dipatches map migration updates to other player listeners
+
 # Reflections, Next-steps & Conclusion
 ## Reflections and Rationale post feature update
 During the length of the project, items naturally arose in which we had to discuss as a group if they were to be 

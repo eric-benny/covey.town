@@ -112,6 +112,7 @@ specific to the sub-map.
     introduce new features to the sub-maps without needing to modify the CoveySuperMapScene class. 
 
 # Back-end: roomService
+![plyr_hndlr_lstnr_ctlr](docs/plyr_hndlr_lstnr_ctlr.png)
 Changes for the backend roomService handle the players moving between maps. 
 Ensuring that all player map locations are tracked and events are broadcast to other players.
 ## Player.ts

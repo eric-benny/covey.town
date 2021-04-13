@@ -16,7 +16,7 @@ Page requirement: max 4 pages.
 3.quick explanation how we broke up our DESIGN.md doc
 -->
 ### Planning and Approach
-In our initial planning phase, we brainstormed different features to create create for Covey.Town and felt that submaps would be a great feature to implement.  We tried our best to follow certain themes in our approach:
+In our initial planning phase, we brainstormed different features to create for Covey.Town and felt that submaps would be a great feature to implement.  We tried our best to follow certain themes in our approach:
 
 1. make use of the current functionality to our advantage
 2. make our code/feature extensible such that it could have a lifecycle that could be continued after this project ends and more features can be created upon ours.
@@ -133,8 +133,7 @@ Ensuring that all player map locations are tracked and events are broadcast to o
 2. CoveyTownController.test.ts: add tests to confirm notification of listeners to player migrations between maps
 3. CoveyTownSocket.test.ts: test that the socket dipatches map migration updates to other player listeners
 
-# Reflections, Next-steps & Conclusion
-## Reflections and Rationale post feature update
+# Additional Design Comments
 During the length of the project, items naturally arose in which we had to discuss as a group if they were to be 
 addressed now vs. later.  We tried our best to stick to the project plan we created at the beginning of the project,
 while weighing in on the "now vs. later" items.  Some of these items were outside the scope of our use cases and what
@@ -150,10 +149,3 @@ We felt it important to list what we left for later and some rationale behind th
      This is an item that is more UI and something and while we wanted to work on this, we felt that we should spend our time focused on the use-cases and if we have time to work on later.
    - In the next release, if you include the transporter code, then the spawn relocation becomes less of an issue as you can utilize the transporter functionality to traverse the map.
 
-
-
-## Next-steps & Conclusion:
-1. Having good discussion early on in the project allowed all of us to explore different design options and incorporate
-everyone's thoughts into the project design.  Creating a project schedule, taking meeting minutes, and having regular meetings,
-made things easier for us to react as a team in our creation and implementation of our design.
-2. [todo] list anything else

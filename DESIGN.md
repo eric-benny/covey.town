@@ -24,7 +24,7 @@ In our initial planning phase, we brainstormed different features to create for 
 Given our constraints such as a short timeline, coming into a codebase that we haven’t seen before, and learning the regular curriculum, we felt our submaps feature aligned with our approach and requirements for the project.
 
 We explored the WorldMap class (WorldMap.tsx) and the CoveyGameScene class (inside the WorldMap.tsx) and spent a considerable amount of time reviewing/discussing the flow of the current application.  We realized that there was current functionality we could tap into and felt we would want to make the following changes:
-1. WorldMap.tsx → move CoveySuperMapScene class (formerly CoveyGameScene) our of this file and  into it’s own file.
+1. WorldMap.tsx → move CoveySuperMapScene class (formerly CoveyGameScene) out of this file and  into it’s own file.
 2. Create a new class and separate file, CoveySubMapScene, that would extends CoveySuperMapScene
 
 ### This resulted in the following changes and purposes:

@@ -24,12 +24,12 @@ In our initial planning phase, we brainstormed different features to create crea
 Given our constraints such as a short timeline, coming into a codebase that we haven’t seen before, and learning the regular curriculum, we felt our submaps feature aligned with our approach and requirements for the project.
 
 We explored the WorldMap class (WorldMap.tsx) and the CoveyGameScene class (inside the WorldMap.tsx) and spent a considerable amount of time reviewing/discussing the flow of the current application.  We realized that there was current functionality we could tap into and felt we would want to make the following changes:
-1. WorldMap.tsx → move CoveySuperMapScene class (formally CoveyGameScene) our of this file and  into it’s own file.
+1. WorldMap.tsx → move CoveySuperMapScene class (formerly CoveyGameScene) our of this file and  into it’s own file.
 2. Create a new class and separate file, CoveySubMapScene, that would extends CoveySuperMapScene
 
 ### This resulted in the following changes and purposes:
 1. WorldMap.tsx : WorldMap will be the class that contains functionality for our SuperMap and for our SubMap(s).  The function, createMapScene, which is responsible in creating the map in either the the Super or Submap is declared here.  If the currentMapID is a 0, then it refers to the SuperMap, if it is a, 1, then this will refer to the Submap.  We will continue to use this 0 and 1 methodology to help the avatar shift easily between Super and Sub maps.
-2. CoveySuperMapScene.ts: This class was formally known as CoveyGameScene and changed to CoveySuperMapScene and moved to a separate file.  Our approach in looking at this file was, to refactor where needed, but to extend functionality from this map to the Submap.  We needed our two separate maps to be able to have the same properties so they could speak the same language to each other.
+2. CoveySuperMapScene.ts: This class was formerly known as CoveyGameScene and changed to CoveySuperMapScene and moved to a separate file.  Our approach in looking at this file was, to refactor where needed, but to extend functionality from this map to the Submap.  We needed our two separate maps to be able to have the same properties so they could speak the same language to each other.
 3. CoveySubMapScene.ts:  Within the CoveySubMapScene, we take care of all our subMap functionality.  Previously, we thought we may need many functions here, but realized, this would create a lot of code duplication.  The CoveySubMapScene extends CoveySuperMapScene, so we realized that the superMap can deal with a lot of the logic.  The main difference is the subMap class will just preload the actual subMap file, while the superMap will deal with any heavy lifting.
 
 We will go through the rest of the design by breaking this into sections of: Front-end: App.tsx, Front-end: WorldMap.tsx, CoveySuperMapScene.ts, CoveySubMapScene.ts, Reflections and Next-steps
@@ -69,14 +69,47 @@ CS5500 Group 41 > Deliverables > Design Notes.docx
 
 ## WorldMap.tsx
 ![worldFolder_4.8.21.png](docs/worldFolder_4.12.21.png)
-1. [todo] About the WorldMap.tsx
-    1. What we first saw when looking at WorldMap
-2. [todo]List info How we imagined extensible design and created: CoveySuperMapScene and CoveySubMapScene
+1. Updates:
+    - CoveySuperMapScene (formerly CoveyGameScene) moved to it's own 
+    file. This was done to prevent circular dependency error caused
+    by importing CoveySubMapScene, which extends CoveySuperMapScene, 
+    into the file where its super-class is defined. 
+    - CoveySuperMapScene and CoveySubMapScene classes now imported
+    - createMapScene function added to dynamically create the required
+    scene based on the player's current CoveyTownMapID
+    - WorldMap function updated to extract emitMapChange and
+    currentMapID from the App state. New game scene is now collected
+    from the createMapScene function instead of directly instantiated. 
+    Additional dependencies added to useEffect hooks to run on map change.
 ## CoveySuperMapScene.ts
-1. [todo] About the CoveySuperMapScene
-2. Changing between scenes of Super--> Sub and Sub-->Super
+1. This class now serves as the main map class where common functionality
+between map types (player movement, sprite management, rendering, etc.) is
+defined. New map types (e.g., CoveySubMapScene) can extend from this class to
+take advantage of this functionality.   
+2. Updates:
+    - Formerly CoveyGameScene, renamed to be more descriptive of new
+    design paradigm
+    - Definition moved to its own file to prevent circular dependency 
+    issues with extending classes
+    - tileMap, currentMapID, emitMapChange, and map properties added
+    - emitMapChange function and mapID added to constructor
+    - function added to transfer player to handle player transfer to new
+    map
+    - mapID added to player constructor calls
+    - player mapID is set in the updatePlayerLocation function
+    - sprite recovery added to updatePlayerLocation function
+    - sprite visibility toggled by mapID in updatePlayerLocation function
+    - Door object embedded in map to act as a trigger for map change event
+
 ## CoveySubMapScene.ts
-1. [todo] About the CoveySubMapScene
+1. This class extends the CoveySuperMapScene class, and includes functionality
+specific to the sub-map.
+    - currently, major differences only include asset definitions, which are
+    used to render the specific tilesets and collisions for the sub-map, and
+    overriding the transfer function to send the player back to the super-map
+    when a transfer event is triggered. 
+    - additional functionality can be added to this class as desired to
+    introduce new features to the sub-maps without needing to modify the CoveySuperMapScene class. 
 
 # Back-end: roomService
 Changes for the backend roomService handle the players moving between maps. 

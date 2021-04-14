@@ -8,6 +8,7 @@ We are hoping to fix some of these issues, by creating submaps in covey.town.  S
 
 You can view our reference deployment of the app at [https://lucid-hopper-1f156f.netlify.app/](https://lucid-hopper-1f156f.netlify.app/).
 
+Our GitHub Repository is at [https://github.com/eric-benny/covey.town/](https://github.com/eric-benny/covey.town/).
 # Covey.Town Architecture with Submap functionality
 ![Covey.Town Architecture](docs/Group41_Architecture.png)
 The figure above depicts the high-level architecture of Covey.Town with our new feature, submaps.
